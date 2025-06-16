@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 
 const categories = ["All", "Fashion", "Lifestyle", "Commercial", "Portrait"]
 
-const portfolioItems = [
+const photoItems = [
   { id: 1, category: "Fashion", title: "Urban Elegance", image: "/placeholder.svg?height=600&width=400" },
   { id: 2, category: "Lifestyle", title: "Morning Light", image: "/placeholder.svg?height=600&width=400" },
   { id: 3, category: "Commercial", title: "Brand Story", image: "/placeholder.svg?height=600&width=400" },
@@ -19,22 +19,28 @@ const portfolioItems = [
   { id: 10, category: "Lifestyle", title: "Natural Beauty", image: "/placeholder.svg?height=600&width=400" },
   { id: 11, category: "Commercial", title: "Brand Vision", image: "/placeholder.svg?height=600&width=400" },
   { id: 12, category: "Portrait", title: "Soul Capture", image: "/placeholder.svg?height=600&width=400" },
+  { id: 13, category: "Fashion", title: "Avant-Garde", image: "/placeholder.svg?height=600&width=400" },
+  { id: 14, category: "Lifestyle", title: "City Life", image: "/placeholder.svg?height=600&width=400" },
+  { id: 15, category: "Commercial", title: "Corporate Identity", image: "/placeholder.svg?height=600&width=400" },
+  { id: 16, category: "Portrait", title: "Emotional Depth", image: "/placeholder.svg?height=600&width=400" },
 ]
 
-export default function PortfolioPage() {
+export default function PhotosPage() {
   const [activeCategory, setActiveCategory] = useState("All")
 
   const filteredItems =
-    activeCategory === "All" ? portfolioItems : portfolioItems.filter((item) => item.category === activeCategory)
+    activeCategory === "All" ? photoItems : photoItems.filter((item) => item.category === activeCategory)
 
   return (
     <div className="min-h-screen pt-24 pb-16">
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-6xl font-light mb-6">Portfolio</h1>
+          <h1 className="text-4xl md:text-6xl font-light mb-6">Photos</h1>
+          <div className="w-16 h-0.5 bg-gradient-to-r from-[#8305a6] to-[#442273] mx-auto mb-6"></div>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            A collection of visual stories, each frame carefully crafted to capture emotion, beauty, and authenticity.
+            A curated collection of visual stories, each frame carefully crafted to capture emotion, beauty, and
+            authenticity.
           </p>
         </div>
 
@@ -45,19 +51,23 @@ export default function PortfolioPage() {
               key={category}
               variant={activeCategory === category ? "default" : "outline"}
               onClick={() => setActiveCategory(category)}
-              className="px-6 py-2"
+              className={`px-6 py-2 transition-all duration-300 ${
+                activeCategory === category
+                  ? "bg-[#8305a6] text-white hover:bg-[#442273]"
+                  : "border-[#8305a6] text-[#8305a6] hover:bg-[#8305a6] hover:text-white"
+              }`}
             >
               {category}
             </Button>
           ))}
         </div>
 
-        {/* Portfolio Grid */}
+        {/* Photo Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredItems.map((item, index) => (
             <div
               key={item.id}
-              className="group cursor-pointer"
+              className="group cursor-pointer animate-fade-in-on-scroll"
               style={{
                 animationDelay: `${index * 0.1}s`,
               }}
@@ -83,8 +93,12 @@ export default function PortfolioPage() {
 
         {/* Load More */}
         <div className="text-center mt-16">
-          <Button variant="outline" size="lg">
-            Load More Work
+          <Button
+            variant="outline"
+            size="lg"
+            className="border-2 border-[#8305a6] text-[#8305a6] hover:bg-[#8305a6] hover:text-white transition-all duration-300"
+          >
+            Load More Photos
           </Button>
         </div>
       </div>

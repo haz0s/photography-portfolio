@@ -10,7 +10,8 @@ export default function Footer() {
           <div>
             <h3 className="text-2xl font-light mb-4">Sarah Chen</h3>
             <p className="text-gray-400 mb-6">
-              Visual storyteller capturing authentic moments and creating compelling narratives through photography.
+              Visual storyteller capturing authentic moments and creating compelling narratives through photography and
+              video production.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
@@ -32,11 +33,11 @@ export default function Footer() {
               <Link href="/" className="block text-gray-400 hover:text-white transition-colors">
                 Home
               </Link>
-              <Link href="/portfolio" className="block text-gray-400 hover:text-white transition-colors">
-                Portfolio
+              <Link href="/photos" className="block text-gray-400 hover:text-white transition-colors">
+                Photos
               </Link>
-              <Link href="/about" className="block text-gray-400 hover:text-white transition-colors">
-                About
+              <Link href="/production" className="block text-gray-400 hover:text-white transition-colors">
+                Production
               </Link>
               <Link href="/contact" className="block text-gray-400 hover:text-white transition-colors">
                 Contact
