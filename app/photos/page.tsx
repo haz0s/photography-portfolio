@@ -3,105 +3,169 @@
 import { useState } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
+import photoManifestJson from "../../photoManifest.json"
 
-const categories = ["All", "Fashion", "Lifestyle", "Commercial", "Portrait"]
+type PhotoManifest = {
+	Corprate: string[]
+	Fashion: string[]
+	"Food Photography": string[]
+	Moments: string[]
+	Portraits: string[]
+	"Product Photography": string[]
+}
 
-const photoItems = [
-  { id: 1, category: "Fashion", title: "Urban Elegance", image: "/placeholder.svg?height=600&width=400" },
-  { id: 2, category: "Lifestyle", title: "Morning Light", image: "/placeholder.svg?height=600&width=400" },
-  { id: 3, category: "Commercial", title: "Brand Story", image: "/placeholder.svg?height=600&width=400" },
-  { id: 4, category: "Portrait", title: "Character Study", image: "/placeholder.svg?height=600&width=400" },
-  { id: 5, category: "Fashion", title: "Minimalist Chic", image: "/placeholder.svg?height=600&width=400" },
-  { id: 6, category: "Lifestyle", title: "Golden Hour", image: "/placeholder.svg?height=600&width=400" },
-  { id: 7, category: "Commercial", title: "Product Essence", image: "/placeholder.svg?height=600&width=400" },
-  { id: 8, category: "Portrait", title: "Authentic Moments", image: "/placeholder.svg?height=600&width=400" },
-  { id: 9, category: "Fashion", title: "Street Couture", image: "/placeholder.svg?height=600&width=400" },
-  { id: 10, category: "Lifestyle", title: "Natural Beauty", image: "/placeholder.svg?height=600&width=400" },
-  { id: 11, category: "Commercial", title: "Brand Vision", image: "/placeholder.svg?height=600&width=400" },
-  { id: 12, category: "Portrait", title: "Soul Capture", image: "/placeholder.svg?height=600&width=400" },
-  { id: 13, category: "Fashion", title: "Avant-Garde", image: "/placeholder.svg?height=600&width=400" },
-  { id: 14, category: "Lifestyle", title: "City Life", image: "/placeholder.svg?height=600&width=400" },
-  { id: 15, category: "Commercial", title: "Corporate Identity", image: "/placeholder.svg?height=600&width=400" },
-  { id: 16, category: "Portrait", title: "Emotional Depth", image: "/placeholder.svg?height=600&width=400" },
+const photoManifest = photoManifestJson as PhotoManifest
+
+// Define your categories and their folder names
+const categories = [
+	{ label: "All", folder: null },
+	{ label: "Corporate", folder: "Corprate" },
+	{ label: "Fashion", folder: "Fashion" },
+	{ label: "Food Photography", folder: "Food Photography" },
+	{ label: "Moments", folder: "Moments" },
+	{ label: "Portraits", folder: "Portraits" },
+	{ label: "Product Photography", folder: "Product Photography" },
 ]
 
+// Number of photos to load per batch
+const PHOTOS_PER_LOAD = 14
+
 export default function PhotosPage() {
-  const [activeCategory, setActiveCategory] = useState("All")
+	const [activeCategory, setActiveCategory] = useState<string>("All")
+	const [loadedCount, setLoadedCount] = useState(PHOTOS_PER_LOAD)
+	const [fullscreenPhoto, setFullscreenPhoto] = useState<null | string>(null)
 
-  const filteredItems =
-    activeCategory === "All" ? photoItems : photoItems.filter((item) => item.category === activeCategory)
+	// Get the photo list for the current category from the manifest
+	let photos: string[] = []
+	if (activeCategory === "All") {
+		// Flatten all arrays and slice to loadedCount
+		photos = categories
+			.filter((c) => c.folder)
+			.flatMap((cat) => photoManifest[cat.folder as keyof PhotoManifest] || [])
+			.filter((src): src is string => typeof src === "string")
+			.slice(0, loadedCount)
+	} else {
+		const folder = categories.find((c) => c.label === activeCategory)?.folder
+		if (folder) {
+			photos = (photoManifest[folder as keyof PhotoManifest] || [])
+				.filter((src): src is string => typeof src === "string")
+				.slice(0, loadedCount)
+		}
+	}
 
-  return (
-    <div className="min-h-screen pt-24 pb-16">
-      <div className="max-w-7xl mx-auto px-4">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-6xl font-light mb-6">Photos</h1>
-          <div className="w-16 h-0.5 bg-gradient-to-r from-[#8305a6] to-[#442273] mx-auto mb-6"></div>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            A curated collection of visual stories, each frame carefully crafted to capture emotion, beauty, and
-            authenticity.
-          </p>
-        </div>
+	function getCollageClasses(index: number) {
+		// First row: always 1x1 to fill the grid
+		if (index < 4) return "row-span-1 col-span-1"
+		// Collage pattern for the rest
+		if (index % 6 === 1) return "row-span-1 col-span-1"
+		if (index % 6 === 2) return "row-span-2 col-span-1"
+		if (index % 6 === 3) return "row-span-1 col-span-2"
+		if (index % 6 === 4) return "row-span-1 col-span-1"
+		return "row-span-1 col-span-1"
+	}
 
-        {/* Filter Buttons */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
-          {categories.map((category) => (
-            <Button
-              key={category}
-              variant={activeCategory === category ? "default" : "outline"}
-              onClick={() => setActiveCategory(category)}
-              className={`px-6 py-2 transition-all duration-300 ${
-                activeCategory === category
-                  ? "bg-[#8305a6] text-white hover:bg-[#442273]"
-                  : "border-[#8305a6] text-[#8305a6] hover:bg-[#8305a6] hover:text-white"
-              }`}
-            >
-              {category}
-            </Button>
-          ))}
-        </div>
+	return (
+		<div className="min-h-screen pt-24 pb-16 bg-background text-foreground">
+			<div className="max-w-7xl mx-auto px-4">
+				{/* Header */}
+				<div className="text-center mb-16">
+					<h1 className="text-4xl md:text-6xl font-light mb-6">Photos</h1>
+					<div className="w-16 h-0.5 bg-gradient-to-r from-[#8305a6] to-[#442273] mx-auto mb-6"></div>
+					<p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+						A curated collection of visual stories, each frame carefully crafted to capture emotion, beauty, and
+						authenticity.
+					</p>
+				</div>
 
-        {/* Photo Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredItems.map((item, index) => (
-            <div
-              key={item.id}
-              className="group cursor-pointer animate-fade-in-on-scroll"
-              style={{
-                animationDelay: `${index * 0.1}s`,
-              }}
-            >
-              <div className="relative aspect-[3/4] overflow-hidden rounded-lg bg-gray-100">
-                <Image
-                  src={item.image || "/placeholder.svg"}
-                  alt={item.title}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300" />
-                <div className="absolute inset-0 flex items-end p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="text-white">
-                    <h3 className="text-lg font-medium mb-1">{item.title}</h3>
-                    <p className="text-sm opacity-90">{item.category}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+				{/* Filter Buttons */}
+				<div className="flex flex-wrap justify-center gap-4 mb-12">
+					{categories.map((category) => (
+						<Button
+							key={category.label}
+							variant={activeCategory === category.label ? "default" : "outline"}
+							onClick={() => {
+								setActiveCategory(category.label)
+								setLoadedCount(PHOTOS_PER_LOAD)
+							}}
+							className={`px-6 py-2 transition-all duration-300 ${
+								activeCategory === category.label
+									? "bg-[#8305a6] text-white hover:bg-[#442273]"
+									: "border-[#8305a6] text-[#8305a6] hover:bg-[#8305a6] hover:text-white"
+							}`}
+						>
+							{category.label}
+						</Button>
+					))}
+				</div>
 
-        {/* Load More */}
-        <div className="text-center mt-16">
-          <Button
-            variant="outline"
-            size="lg"
-            className="border-2 border-[#8305a6] text-[#8305a6] hover:bg-[#8305a6] hover:text-white transition-all duration-300"
-          >
-            Load More Photos
-          </Button>
-        </div>
-      </div>
-    </div>
-  )
+				{/* Collage Photo Grid */}
+				<div className="grid grid-cols-2 sm:grid-cols-4 auto-rows-[180px] gap-3 md:gap-4">
+					{photos.map((src, index) => (
+						<div
+							key={src}
+							className={`relative cursor-pointer group overflow-hidden rounded-lg ${getCollageClasses(index)}`}
+							onClick={() => setFullscreenPhoto(src)}
+						>
+							<Image
+								src={src}
+								alt=""
+								fill
+								className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
+								sizes="(max-width: 768px) 50vw, 25vw"
+								priority={index < 8}
+							/>
+							<div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300" />
+						</div>
+					))}
+				</div>
+
+				{/* Fullscreen Modal */}
+				{fullscreenPhoto && (
+					<div
+						className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm"
+						onClick={() => setFullscreenPhoto(null)}
+					>
+						<div className="relative w-full h-full flex items-center justify-center">
+							<Image
+								src={fullscreenPhoto}
+								alt=""
+								fill
+								className="object-contain"
+								priority
+							/>
+							<button
+								className="absolute top-8 right-8 text-white text-3xl font-bold bg-black/60 rounded-full px-4 py-2 hover:bg-black/80 transition"
+								onClick={(e) => {
+									e.stopPropagation()
+									setFullscreenPhoto(null)
+								}}
+								aria-label="Close"
+							>
+								×
+							</button>
+						</div>
+					</div>
+				)}
+
+				{/* Load More */}
+				<div className="text-center mt-16">
+					<Button
+						variant="outline"
+						size="lg"
+						className="border-2 border-[#8305a6] text-[#8305a6] hover:bg-[#8305a6] hover:text-white transition-all duration-300"
+						onClick={() => setLoadedCount(loadedCount + PHOTOS_PER_LOAD)}
+						disabled={
+							activeCategory === "All"
+								? photos.length >= categories
+										.filter((c) => c.folder)
+										.reduce((acc, cat) => acc + (photoManifest[cat.folder as keyof PhotoManifest] || []).length, 0)
+								: photos.length >= (photoManifest[categories.find((c) => c.label === activeCategory)?.folder as keyof PhotoManifest] || []).length
+						}
+					>
+						Load More Photos
+					</Button>
+				</div>
+			</div>
+		</div>
+	)
 }

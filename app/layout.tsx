@@ -8,7 +8,7 @@ import Footer from "./components/Footer"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Sarah Chen - Visual Storyteller & Creative Director",
+  title: "Judy Abdrabo - Visual Storyteller & Creative Director",
   description:
     "Professional photographer specializing in fashion, lifestyle, and commercial photography. Based in New York City, available worldwide.",
   keywords:
@@ -23,6 +23,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet"></link>
+      </head>
       <body className={inter.className}>
         <Navigation />
         <main>{children}</main>

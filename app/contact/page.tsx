@@ -19,8 +19,13 @@ export default function ContactPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission here
-    console.log("Form submitted:", formData)
+    // Open user's email client with pre-filled fields
+    const mailto = `mailto:Judyabdr@Gmail.com?subject=${encodeURIComponent(
+      formData.subject
+    )}&body=${encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`
+    )}`
+    window.location.href = mailto
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -111,8 +116,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-medium mb-2">Email</h3>
-                  <p className="text-gray-600">hello@sarahchen.com</p>
-                  <p className="text-gray-600">studio@sarahchen.com</p>
+                  <p className="text-gray-600">Judyabdr@Gmail.com</p>
                 </div>
               </div>
 
