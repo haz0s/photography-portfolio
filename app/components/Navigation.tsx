@@ -45,8 +45,8 @@ export default function Navigation() {
             <Image
               src="/logo.png" // <-- Replace with your logo path
               alt="Logo"
-              width={100}
-              height={100}
+              width={150}
+              height={150}
               className="object-contain"
               priority
             />

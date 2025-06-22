@@ -12,6 +12,7 @@ export default function HomePage() {
   const [animationKey, setAnimationKey] = useState(0)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const animationRef = useRef<HTMLDivElement>(null)
+  const featuredScrollRef = useRef<HTMLDivElement>(null);
 
   const featuredWorks = [
     {
@@ -88,72 +89,61 @@ export default function HomePage() {
     }
   }, [])
 
+  // Endless scroll handler for arrows
+  const scrollFeatured = (direction: "left" | "right") => {
+    const container = featuredScrollRef.current;
+    if (!container) return;
+    const card = container.querySelector("div[data-featured-card]");
+    if (!card) return;
+    const cardWidth = (card as HTMLElement).offsetWidth + 32; // 32px gap-8
+    const visibleCards = Math.floor(container.offsetWidth / cardWidth);
+    const totalCards = featuredWorks.length;
+
+    if (direction === "right") {
+      // If at (or near) the end, jump to start
+      if (container.scrollLeft + container.offsetWidth >= container.scrollWidth - cardWidth) {
+        container.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        container.scrollBy({ left: cardWidth * visibleCards, behavior: "smooth" });
+      }
+    } else {
+      // If at (or near) the start, jump to end
+      if (container.scrollLeft <= 0) {
+        container.scrollTo({ left: container.scrollWidth, behavior: "smooth" });
+      } else {
+        container.scrollBy({ left: -cardWidth * visibleCards, behavior: "smooth" });
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground">
-      {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-start overflow-hidden bg-background">
-        {/* Background Photo */}
-        <Image
-          src="/photos/hero-bg.jpg" // <-- Replace with your hero image path
-          alt="Hero Background"
-          fill
-          priority
-          className="object-cover object-center absolute inset-0 z-0"
-        />
-        {/* Optional: Overlay for darkening the image */}
-        <div className="absolute inset-0 bg-black/60 z-10" />
-
-        <div className="relative z-20 text-left px-4 md:pl-24 animate-fade-in-up max-w-2xl">
-          <div className="animate-slide-down">
-            <h1 className="text-6xl md:text-8xl font-extralight mb-6 tracking-wide">Hi! it's Judy Abdrabo</h1>
-            <div className="w-24 h-0.5 bg-gradient-to-r from-white/80 to-white/40 mb-6 animate-expand"></div>
-            <p className="text-xl md:text-2xl font-light mb-12 opacity-90 leading-relaxed">
-              Capturing authentic moments through the lens of creativity and passion
-            </p>
-          </div>
-
-          <div className="flex flex-col sm:flex-row gap-6 animate-fade-in-delayed">
-            <Button
-              asChild
-              size="lg"
-              className="bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white hover:text-[#8305a6] transition-all duration-300 transform hover:scale-105 shadow-lg"
-            >
-              <Link href="/photos">
-                View Portfolio <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="bg-white/10 backdrop-blur-md border border-white/20 text-white/60 hover:bg-white hover:text-[#8305a6] transition-all duration-300 transform hover:scale-105 shadow-lg"
-            >
-              <Link href="/contact">Get In Touch</Link>
-            </Button>
-          </div>
+      {/* Hero Image (matches width of about section) */}
+      <div className="w-full flex justify-center pt-24 pb-10">
+        <div className="relative w-full max-w-6xl aspect-[16/9] rounded-2xl overflow-hidden shadow-lg">
+          <Image
+            src="/photos/hero-bg.jpg"
+            alt="Hero Background"
+            fill
+            className="object-cover object-center"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/60" />
         </div>
+      </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-24 animate-bounce z-20">
-          <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white/70 rounded-full mt-2 animate-pulse"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section className="py-24 px-4 bg-background text-foreground">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="animate-fade-in-on-scroll">
-            <h2 className="text-4xl md:text-5xl font-light mb-8 text-foreground">About</h2>
-            <div className="w-16 h-0.5 bg-gradient-to-r from-[#f29f05] to-[#f27405] mx-auto mb-8"></div>
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-8 max-w-3xl mx-auto">
-              Hi! I’m Judy — a Syrian photographer and producer based in Dubai, with 6 years of experience in the creative world. I’ve worked with over 70 clients and brands, from fashion and food to events and large-scale campaigns.
-              I hear it all the time: “We’re not photogenic!” But I truly believe that with the right light, angle, and approach — everyone can look and feel their best on camera. That mindset shapes everything I do, whether I’m shooting real moments, crafting the perfect food shot, or leading full productions for ads and music videos.
-              I love what I do, and I bring energy, creativity, and care to every project I take on
-              From first idea to final shot — I’ve got you. Drop me a message and let’s get started.
-            </p>
-          </div>
+      {/* Name and About Side by Side */}
+      <section className="flex flex-col md:flex-row items-start justify-center gap-10 max-w-6xl mx-auto px-4 py-16">
+        <h1 className="text-5xl md:text-6xl font-extralight mb-8 md:mb-0 tracking-wide text-[#8305a6] whitespace-nowrap">
+          Judy Abdrabo
+        </h1>
+        <div className="flex-1">
+          <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-8 max-w-3xl">
+            Hi! I’m Judy — a Syrian photographer and producer based in Dubai, with 6 years of experience in the creative world. I’ve worked with over 70 clients and brands, from fashion and food to events and large-scale campaigns.
+            I hear it all the time: “We’re not photogenic!” But I truly believe that with the right light, angle, and approach — everyone can look and feel their best on camera. That mindset shapes everything I do, whether I’m shooting real moments, crafting the perfect food shot, or leading full productions for ads and music videos.
+            I love what I do, and I bring energy, creativity, and care to every project I take on.
+            From first idea to final shot — I’ve got you. Drop me a message and let’s get started.
+          </p>
         </div>
       </section>
 
@@ -162,12 +152,57 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 animate-fade-in-on-scroll">
             <h2 className="text-4xl md:text-5xl font-light mb-4 text-foreground">Featured Work</h2>
-            <div className="w-16 h-0.5 bg-gradient-to-r from-[#442273] to-[#8305a6] mx-auto mb-6"></div>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               A curated selection showcasing different styles and approaches across various photography genres
             </p>
           </div>
-          <ConveyorBelt featuredWorks={featuredWorks} />
+          {/* Horizontal scrollable featured works with arrow buttons */}
+          <div className="relative">
+            <button
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-background/80 hover:bg-background rounded-full p-2 shadow transition disabled:opacity-50"
+              onClick={() => scrollFeatured("left")}
+              aria-label="Scroll left"
+              type="button"
+            >
+              <ChevronLeft className="w-7 h-7 text-[#8305a6]" />
+            </button>
+            <div
+              ref={featuredScrollRef}
+              className="flex overflow-x-auto gap-8 py-4 px-2 scroll-smooth scrollbar-hide"
+              style={{ scrollBehavior: "smooth" }}
+            >
+              {featuredWorks.map((item) => (
+                <div
+                  key={item.id}
+                  data-featured-card
+                  className="flex-shrink-0 w-[420px] md:w-[520px] aspect-[16/9] rounded-2xl overflow-hidden shadow-lg bg-card group cursor-pointer transition-transform hover:scale-105 relative"
+                >
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={item.photo}
+                      alt={item.title}
+                      fill
+                      className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                    />
+                    {/* Overlay with big centered name, hides on hover */}
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/60 group-hover:bg-black/0 transition-all duration-500">
+                      <span className="text-white text-4xl md:text-5xl font-bold text-center transition-all duration-500 group-hover:opacity-0 group-hover:scale-90 opacity-100">
+                        {item.title}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-background/80 hover:bg-background rounded-full p-2 shadow transition disabled:opacity-50"
+              onClick={() => scrollFeatured("right")}
+              aria-label="Scroll right"
+              type="button"
+            >
+              <ChevronRight className="w-7 h-7 text-[#8305a6]" />
+            </button>
+          </div>
           <div className="text-center mt-12 animate-fade-in-on-scroll">
             <Button
               asChild
@@ -188,7 +223,6 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 animate-fade-in-on-scroll">
             <h2 className="text-4xl md:text-5xl font-light mb-4 text-foreground">Trusted by Leading Brands</h2>
-            <div className="w-16 h-0.5 bg-gradient-to-r from-[#8305a6] to-[#442273] mx-auto mb-6"></div>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Collaborating with industry leaders to create compelling visual narratives that drive results
             </p>
@@ -197,10 +231,9 @@ export default function HomePage() {
             {clients.map((client, index) => (
               <div
                 key={index}
-                className="flex items-center justify-center p-6 bg-gradient-to-r from-[#1a1026] to-[#442273] rounded-xl shadow-sm hover:shadow-md transition-all duration-300 group"
-                style={{ animationDelay: `${index * 0.1}s` }}
+                className="flex items-center justify-center p-6 bg-black rounded-xl shadow-sm"
               >
-                <div className="relative w-full h-12 group-hover:grayscale-0 transition-all duration-300 opacity-60 group-hover:opacity-100">
+                <div className="relative w-full h-12 opacity-100">
                   <Image
                     src={client.logo || "/placeholder.svg"}
                     alt={`${client.name} logo`}
@@ -241,7 +274,6 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 animate-fade-in-on-scroll">
             <h2 className="text-4xl md:text-5xl font-light mb-4 text-foreground">Services</h2>
-            <div className="w-16 h-0.5 bg-gradient-to-r from-[#f27405] to-[#f24405] mx-auto mb-6"></div>
             <p className="text-lg text-muted-foreground">Bringing your vision to life through lens and creativity</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
