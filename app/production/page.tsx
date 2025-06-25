@@ -22,6 +22,7 @@ type Project = {
   videoUrl?: string | string[]
   btsFolder?: string // Folder name for BTS images
   reelsFolder?: string // Folder name for reels videos
+  thumbnail?: string // Optional thumbnail image path
 }
 
 const projects: Project[] = [
@@ -30,7 +31,8 @@ const projects: Project[] = [
     title: "Boomph – Live Session",
     category: "Music / Live Session",
     description: "Recorded a live session with the Syrian rapper Bitter Mouthfeel using 3 Sony a7 IV and a 360 camera.",
-    // No BTS
+    videoUrl: "https://youtu.be/5aVHGmSvLTI?si=uWUPqUjKxujSVJZn",
+    // No thumbnail needed (YouTube)
   },
   {
     id: 2,
@@ -38,7 +40,7 @@ const projects: Project[] = [
     category: "Commercial",
     description: "Produced 'Break The Mold' campaign video with Burson Agency.",
     videoUrl: "https://youtu.be/z9INTKS8CAw",
-    // No BTS
+    // No thumbnail needed (YouTube)
   },
   {
     id: 3,
@@ -46,36 +48,43 @@ const projects: Project[] = [
     category: "Commercial",
     description: "Director assistant on an Isuzu ad.",
     videoUrl: "https://youtu.be/BcNLcqvKfqg",
-    btsFolder: "isuzubts", // Only this project has BTS
+    btsFolder: "isuzubts",
+    // No thumbnail needed (YouTube)
   },
   {
     id: 4,
-    title: "The Journey of Happiness / Wedding Promo / Alaa Khashi",
+    title: "Wedding Promo",
     category: "Event / Wedding",
-    description: "Filmed using Canon Mark4. (We can drop this video if needed.)",
-    // No BTS
+    description: "Wedding Promo for Alaa Khashi.",
+    videoUrl: "https://youtu.be/uqFkYPU8q7Q",
+    // No thumbnail needed (YouTube)
   },
   {
     id: 5,
     title: "Jetex – FIFA",
     category: "Commercial",
     description: "Producer with Flick for Jetex FIFA campaign.",
-    videoUrl: "https://youtu.be/JOt_bjWkc0Q",
-    // No BTS
+    videoUrl: [
+      "https://youtu.be/JOt_bjWkc0Q",
+      "https://www.instagram.com/reel/Cj27WC1DlhG/?igsh=dXRpeXdqcjAza2V1"
+    ],
+    // No thumbnail needed (YouTube)
   },
   {
     id: 6,
     title: "Lucid",
     category: "Commercial",
     description: "Producer with Burson Agency.",
-    // No BTS
+    videoUrl: "https://youtu.be/bns37rr7ytQ",
+    // No thumbnail needed (YouTube)
   },
   {
     id: 7,
     title: "Sing in The Sky",
     category: "Music / Live Event",
     description: "Director Assistant.",
-    // No BTS
+    videoUrl: "https://shahid.mbc.net/en/shows/Ghannili-Bil-Jaw/show-957168",
+    thumbnail: "/thumbnails/sing-in-the-sky.png",
   },
   {
     id: 8,
@@ -84,17 +93,20 @@ const projects: Project[] = [
     description: "Created a 10-episode tips series.",
     videoUrl: [
       "https://youtu.be/TSX9Asn1m6A",
-      "https://youtu.be/n82a5MxMu9Q",
+      "https://youtu.be/n82a5MxMu9Q"
     ],
-    // No BTS
+    // No thumbnail needed (YouTube)
   },
   {
     id: 9,
     title: "Podcast with Advanced Media",
     category: "Podcast",
     description: "Hosted an episode of Advanced Podcast at Advanced Media with director Nadine Yasir.",
-    videoUrl: "https://youtu.be/MJ5niDkHNCQ",
-    // No BTS
+    videoUrl: [
+      "https://drive.google.com/file/d/1wxUXJ7HCdiIq2QkJRoETCeEAarcEZC6h/preview",
+      "https://drive.google.com/file/d/18ALQeipVqcdQ3-Y_I1FnLIpCHIIVSYc7/preview"
+    ],
+    thumbnail: "/thumbnails/podcast-with-advanced-media.png",
   },
   {
     id: 10,
@@ -103,18 +115,21 @@ const projects: Project[] = [
     description: "Art Direction alongside Jad Ezzi. Designs on set, end results, and BTS shots.",
     videoUrl: [
       "https://youtu.be/5rh7CPMHo5Q",
-      "https://youtu.be/OgWyrkQRvxI",
+      "https://youtu.be/OgWyrkQRvxI"
     ],
-    btsFolder: "centrepointbts", // Only this project has BTS
+    btsFolder: "centrepointbts",
+    // No thumbnail needed (YouTube)
   },
-  // --- New Projects with Reels ---
   {
     id: 11,
     title: "Unboxing Canon R5",
     category: "Product / Unboxing",
     description: "Unboxing and first impressions of the Canon R5. Includes BTS and vertical reels.",
     btsFolder: "canonr5bts",
-    reelsFolder: "canonr5reels",
+    videoUrl: [
+      "https://drive.google.com/file/d/1Q0dDLhVP4QTrAYwmPkpwpYzD2v1fZMqa/preview"
+    ],
+    thumbnail: "/thumbnails/unboxing-canon-r5.png",
   },
   {
     id: 12,
@@ -122,15 +137,31 @@ const projects: Project[] = [
     category: "Corporate / Reels",
     description: "A series of vertical reels produced for Tecom.",
     btsFolder: "tecombts",
-    reelsFolder: "tecomreels",
+    videoUrl: [
+      "https://drive.google.com/file/d/1CK6oeNkoiNNgjVqMb1Pdax-1NoY37Y8-/preview",
+      "https://drive.google.com/file/d/186ahLwdIBNhgXVpHMIpl6kKqJdbo3Lyo/preview",
+      "https://drive.google.com/file/d/1E77P5eDp-tQnf7z-yqXlUZeatu7pXmA6/preview",
+      "https://drive.google.com/file/d/1ZAvgV-aWyR9O5NP4UebNzhV75iaaF0r_/preview",
+      "https://drive.google.com/file/d/1_-ojVimRT524JsCM1nKvknXpNnXEIfgE/preview",
+      "https://drive.google.com/file/d/1ShIRfBK8Lc-Ldnyv1ewUS1ud3HUX_Tvi/preview",
+      "https://drive.google.com/file/d/1lo9lDSeqMBEqhYXtm4vLqPXzoqqrnExX/preview",
+      "https://drive.google.com/file/d/12U-OrdZet7eDpI5jmeZOoUSssGRLU-aR/preview",
+      "https://drive.google.com/file/d/1O8BAlMrQIcbwidlE-ng7hdFsBwqJiuZj/preview",
+      "https://drive.google.com/file/d/1TuoEeuMeaeXoT7H6Y0PKCd5V5G9QXc4k/preview",
+      "https://drive.google.com/file/d/1vI4i_8FZ2DqEreeubKN90X7YcaN67N8s/preview",
+      "https://drive.google.com/file/d/1DvTV3ATq1GxhQfd1oZoyLsl6dTwCYSde/preview",
+    ],
+    thumbnail: "/thumbnails/tecom-reels.png",
   },
   {
     id: 13,
     title: "L'occitane - Ramadan",
     category: "Commercial / Campaign",
     description: "Ramadan campaign for L'occitane. Includes vertical video reels.",
+    videoUrl: "https://youtu.be/R88ZT66jsA0",
     btsFolder: "loccitanebts",
     reelsFolder: "loccitanereels",
+    // No thumbnail needed (YouTube)
   },
   {
     id: 14,
@@ -138,14 +169,10 @@ const projects: Project[] = [
     category: "Commercial / Campaign",
     description: "Advanced Media campaign with vertical reels and BTS.",
     btsFolder: "advancedmediabts",
-    reelsFolder: "advancedmediareels",
-  },
-  {
-    id: 15,
-    title: "Photography",
-    category: "Photography",
-    description: "Photography galleries. (If there is anything specific to add, will discuss on the call after the first draft.)",
-    // No BTS
+    videoUrl: [
+      "https://drive.google.com/file/d/16zItmXTxmwaN9lx_mh7H4BaLhIHAEDLN/preview"
+    ],
+    thumbnail: "/thumbnails/advanced-media-campaign.png",
   },
 ]
 
@@ -178,34 +205,6 @@ function useBtsManifest() {
   }, [])
 
   return manifest
-}
-
-// Add a reelsManifest object to map project reelsFolder to an array of video URLs
-const reelsManifest: Record<string, string[]> = {
-  advancedmediareels: [
-    "/bts/advancedmediareels/l.mp4",
-  ],
-  canonr5reels: [
-    "/bts/canonr5reels/Unboxing Canon R5.mov",
-  ],
-  tecomreels: [
-    '/bts/tecomreels/“What advice would you give your younger self” Our valued community members share their career wisdom and how the @dubailynx Young Lynx Academy paves the way for future creatives. We are proud to be a part of cultivating the next genera.mp4',
-    "/bts/tecomreels/A glimpse at the fashion-forward audience of Dubai Fashion Week A-W 25-26..mp4",
-    "/bts/tecomreels/Get show-ready with expert advice from Dyson✨ . Learn how to craft the perfect look with their pro tips and tricks. 💇_♀️.mp4",
-    "/bts/tecomreels/Snapins.ai_video_AQNDlij87q0BOSZNl_k6gDcyJZ4ZG3uudL7npk0X9HzMFcIRVz-yVZtPrvrEzHRxibBlDSHc-6sD9StuhrmDOJrwLc45ygQWCiMfqEc.mp4",
-    "/bts/tecomreels/Snapins.ai_video_AQNiPPMt6kaL18pTQUPvga1Ujl98eKYbiGqaP0kVP_iwdD91zbSk4EQdQcLh6CyCwCkULp1z05it2G6z9V16RgCGbuaKvgOPxZOFZSU.mp4",
-    "/bts/tecomreels/Snapins.ai_video_AQO0fBeRaYt7bSOjnlu6MkrNTVfVfkW0uDLE5lPIYZiblHqPvuQUiGToeHx7HkOzJO-wCBxX3JixyfLJE1x3_4hNu7ckGH0f36G9_nU.mp4",
-    "/bts/tecomreels/Snapins.ai_video_AQO5gXaoL9fjcZ4J5fXOyePeZITJ6kmjYF0F89Tbel8jxR-MI1adWQj44sIiq5w9svJv2RDYiA_x2Pk7QMnqpPFPoL7h9HAvh_YrIPc.mp4",
-    "/bts/tecomreels/Snapins.ai_video_AQO77MMNrBIjH_TKNKNyAWOR9uQ3FTr5PDzNiPjzopH_oMhavpKWBM7QLCfO06fpIQ5JwIF1rXJ-450dNREVGU8YoNvXNwrkIdcJX78.mp4",
-    "/bts/tecomreels/Snapins.ai_video_AQOb9XI024apwALQ5Tf_cMnAA583C8wvhJ0iYQfHJynVzALX1CIX6UgoHwlmwohmDOa1nCRmwVhG27kd6BbTNuVicnFDlMcX8ddziyc.mp4",
-  ],
-  // Add other folders if needed
-}
-
-// Helper to get reels for a project
-function getReels(reelsFolder?: string): string[] {
-  if (!reelsFolder) return []
-  return reelsManifest[reelsFolder] || []
 }
 
 export default function ProductionPage() {
@@ -248,6 +247,9 @@ export default function ProductionPage() {
                     videoThumb = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
                   }
                 }
+              }
+              if (!videoThumb && project.thumbnail) {
+                videoThumb = project.thumbnail
               }
               // Use first BTS image as fallback if available
               const btsImages = project.btsFolder ? btsManifest[project.btsFolder] || [] : []
@@ -295,6 +297,8 @@ export default function ProductionPage() {
             })}
           </div>
         )}
+
+        
 
         {/* Project Modal */}
         {selectedProject && (
@@ -352,47 +356,43 @@ export default function ProductionPage() {
                     : [selectedProject.videoUrl]
                   ).map((url, idx) => {
                     const id = getYouTubeId(url)
-                    return id ? (
-                      <div key={idx} className="aspect-video w-full rounded-lg overflow-hidden shadow-lg">
-                        <iframe
-                          src={`https://www.youtube.com/embed/${id}`}
-                          title="YouTube video player"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                          className="w-full h-full"
-                        />
+                    if (id) {
+                      // YouTube embed
+                      return (
+                        <div key={idx} className="aspect-video w-full rounded-lg overflow-hidden shadow-lg">
+                          <iframe
+                            src={`https://www.youtube.com/embed/${id}`}
+                            title="YouTube video player"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            className="w-full h-full"
+                          />
+                        </div>
+                      )
+                    }
+                    // Google Drive embed
+                    const driveMatch = url.match(/drive\.google\.com\/file\/d\/([^/]+)/)
+                    if (driveMatch) {
+                      return (
+                        <div key={idx} className="aspect-video w-full rounded-lg overflow-hidden shadow-lg">
+                          <iframe
+                            src={url}
+                            allow="autoplay"
+                            allowFullScreen
+                            className="w-full h-full"
+                          />
+                        </div>
+                      )
+                    }
+                    // Fallback: show as external link
+                    return (
+                      <div key={idx} className="my-4">
+                        <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+                          View Video
+                        </a>
                       </div>
-                    ) : null
+                    )
                   })}
-                </div>
-              )}
-
-              {/* Reels Gallery */}
-              {selectedProject.reelsFolder && getReels(selectedProject.reelsFolder).length > 0 && (
-                <div className="mb-8">
-                  <h3 className="text-xl font-semibold mb-4 text-center">Reels</h3>
-                  <div
-                    className={`grid gap-4 justify-items-center ${
-                      getReels(selectedProject.reelsFolder).length === 1
-                        ? "grid-cols-1 place-items-center"
-                        : "grid-cols-1 md:grid-cols-2"
-                    }`}
-                  >
-                    {getReels(selectedProject.reelsFolder).map((src, idx) => (
-                      <div
-                        key={idx}
-                        className="aspect-[9/16] w-full max-w-[340px] rounded-lg overflow-hidden shadow-lg bg-black flex items-center justify-center"
-                      >
-                        <video
-                          src={src}
-                          controls
-                          playsInline
-                          className="w-full h-full object-cover rounded-lg"
-                          style={{ background: "#000" }}
-                        />
-                      </div>
-                    ))}
-                  </div>
                 </div>
               )}
             </div>
