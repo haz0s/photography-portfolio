@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import photoManifestJson from "../../photoManifest.json"
@@ -34,11 +34,11 @@ export default function PhotosPage() {
 	const [activeCategory, setActiveCategory] = useState<string>("All")
 	const [loadedCount, setLoadedCount] = useState(PHOTOS_PER_LOAD)
 	const [fullscreenPhoto, setFullscreenPhoto] = useState<null | string>(null)
+	const [imageSizes, setImageSizes] = useState<Record<string, { width: number; height: number }>>({})
 
 	// Get the photo list for the current category from the manifest
 	let photos: string[] = []
 	if (activeCategory === "All") {
-		// Flatten all arrays and slice to loadedCount
 		photos = categories
 			.filter((c) => c.folder)
 			.flatMap((cat) => photoManifest[cat.folder as keyof PhotoManifest] || [])
@@ -52,6 +52,37 @@ export default function PhotosPage() {
 				.slice(0, loadedCount)
 		}
 	}
+
+	// Dynamically get image sizes for natural collage effect
+	useEffect(() => {
+		const newSizes: Record<string, { width: number; height: number }> = {}
+		let isMounted = true
+
+		async function fetchSizes() {
+			await Promise.all(
+				photos.map(
+					(src) =>
+						new Promise<void>((resolve) => {
+							const img = new window.Image()
+							img.src = src
+							img.onload = () => {
+								if (isMounted) {
+									newSizes[src] = { width: img.naturalWidth, height: img.naturalHeight }
+								}
+								resolve()
+							}
+							img.onerror = () => resolve()
+						})
+				)
+			)
+			if (isMounted) setImageSizes((prev) => ({ ...prev, ...newSizes }))
+		}
+
+		fetchSizes()
+		return () => {
+			isMounted = false
+		}
+	}, [photos])
 
 	function getCollageClasses(index: number) {
 		// First row: always 1x1 to fill the grid
@@ -98,25 +129,37 @@ export default function PhotosPage() {
 					))}
 				</div>
 
-				{/* Collage Photo Grid */}
-				<div className="grid grid-cols-2 sm:grid-cols-4 auto-rows-[180px] gap-3 md:gap-4">
-					{photos.map((src, index) => (
-						<div
-							key={src}
-							className={`relative cursor-pointer group overflow-hidden rounded-lg ${getCollageClasses(index)}`}
-							onClick={() => setFullscreenPhoto(src)}
-						>
-							<Image
-								src={src}
-								alt=""
-								fill
-								className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
-								sizes="(max-width: 768px) 50vw, 25vw"
-								priority={index < 8}
-							/>
-							<div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300" />
-						</div>
-					))}
+				{/* Natural Collage Photo Grid */}
+				<div className="flex flex-wrap gap-3 md:gap-4 justify-center">
+					{photos.map((src, index) => {
+						const size = imageSizes[src]
+						const aspect = size ? size.width / size.height : 1
+						const width = size ? Math.round(180 * aspect) : 180
+						const height = 180
+
+						return (
+							<div
+								key={src}
+								className="relative cursor-pointer group overflow-hidden rounded-lg bg-black"
+								style={{
+									width: `${width}px`,
+									height: `${height}px`,
+									flex: "0 0 auto",
+								}}
+								onClick={() => setFullscreenPhoto(src)}
+							>
+								<Image
+									src={src}
+									alt=""
+									fill
+									className="object-contain object-center transition-transform duration-700"
+									sizes={`${width}px`}
+									priority={index < 8}
+								/>
+								<div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300" />
+							</div>
+						)
+					})}
 				</div>
 
 				{/* Fullscreen Modal */}
