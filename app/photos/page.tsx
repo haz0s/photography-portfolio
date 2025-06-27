@@ -28,30 +28,30 @@ const categories = [
 ]
 
 // Number of photos to load per batch
-const PHOTOS_PER_LOAD = 14
+const PHOTOS_PER_PAGE = 20
 
 export default function PhotosPage() {
 	const [activeCategory, setActiveCategory] = useState<string>("All")
-	const [loadedCount, setLoadedCount] = useState(PHOTOS_PER_LOAD)
+	const [page, setPage] = useState(0)
 	const [fullscreenPhoto, setFullscreenPhoto] = useState<null | string>(null)
 	const [imageSizes, setImageSizes] = useState<Record<string, { width: number; height: number }>>({})
 
 	// Get the photo list for the current category from the manifest
-	let photos: string[] = []
+	let allPhotos: string[] = []
 	if (activeCategory === "All") {
-		photos = categories
+		allPhotos = categories
 			.filter((c) => c.folder)
 			.flatMap((cat) => photoManifest[cat.folder as keyof PhotoManifest] || [])
 			.filter((src): src is string => typeof src === "string")
-			.slice(0, loadedCount)
 	} else {
 		const folder = categories.find((c) => c.label === activeCategory)?.folder
 		if (folder) {
-			photos = (photoManifest[folder as keyof PhotoManifest] || [])
+			allPhotos = (photoManifest[folder as keyof PhotoManifest] || [])
 				.filter((src): src is string => typeof src === "string")
-				.slice(0, loadedCount)
 		}
 	}
+	const totalPages = Math.ceil(allPhotos.length / PHOTOS_PER_PAGE)
+	const photos = allPhotos.slice(page * PHOTOS_PER_PAGE, (page + 1) * PHOTOS_PER_PAGE)
 
 	// Dynamically get image sizes for natural collage effect
 	useEffect(() => {
@@ -84,24 +84,12 @@ export default function PhotosPage() {
 		}
 	}, [photos])
 
-	function getCollageClasses(index: number) {
-		// First row: always 1x1 to fill the grid
-		if (index < 4) return "row-span-1 col-span-1"
-		// Collage pattern for the rest
-		if (index % 6 === 1) return "row-span-1 col-span-1"
-		if (index % 6 === 2) return "row-span-2 col-span-1"
-		if (index % 6 === 3) return "row-span-1 col-span-2"
-		if (index % 6 === 4) return "row-span-1 col-span-1"
-		return "row-span-1 col-span-1"
-	}
-
 	return (
 		<div className="min-h-screen pt-24 pb-16 bg-background text-foreground">
 			<div className="max-w-7xl mx-auto px-4">
 				{/* Header */}
 				<div className="text-center mb-16">
 					<h1 className="text-4xl md:text-6xl font-light mb-6">Photos</h1>
-					
 				</div>
 
 				{/* Filter Buttons */}
@@ -112,7 +100,7 @@ export default function PhotosPage() {
 							variant={activeCategory === category.label ? "default" : "outline"}
 							onClick={() => {
 								setActiveCategory(category.label)
-								setLoadedCount(PHOTOS_PER_LOAD)
+								setPage(0)
 							}}
 							className={`px-6 py-2 transition-all duration-300 ${
 								activeCategory === category.label
@@ -158,6 +146,31 @@ export default function PhotosPage() {
 					})}
 				</div>
 
+				{/* Pagination Controls */}
+				<div className="flex justify-center items-center gap-6 mt-16">
+					<Button
+						variant="outline"
+						size="lg"
+						className="border-2 border-[#8305a6] text-[#8305a6] hover:bg-[#8305a6] hover:text-white transition-all duration-300"
+						onClick={() => setPage((p) => Math.max(0, p - 1))}
+						disabled={page === 0}
+					>
+						Previous
+					</Button>
+					<span className="text-lg text-gray-600">
+						Page {page + 1} of {totalPages}
+					</span>
+					<Button
+						variant="outline"
+						size="lg"
+						className="border-2 border-[#8305a6] text-[#8305a6] hover:bg-[#8305a6] hover:text-white transition-all duration-300"
+						onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+						disabled={page >= totalPages - 1}
+					>
+						Next
+					</Button>
+				</div>
+
 				{/* Fullscreen Modal */}
 				{fullscreenPhoto && (
 					<div
@@ -185,25 +198,6 @@ export default function PhotosPage() {
 						</div>
 					</div>
 				)}
-
-				{/* Load More */}
-				<div className="text-center mt-16">
-					<Button
-						variant="outline"
-						size="lg"
-						className="border-2 border-[#8305a6] text-[#8305a6] hover:bg-[#8305a6] hover:text-white transition-all duration-300"
-						onClick={() => setLoadedCount(loadedCount + PHOTOS_PER_LOAD)}
-						disabled={
-							activeCategory === "All"
-								? photos.length >= categories
-										.filter((c) => c.folder)
-										.reduce((acc, cat) => acc + (photoManifest[cat.folder as keyof PhotoManifest] || []).length, 0)
-								: photos.length >= (photoManifest[categories.find((c) => c.label === activeCategory)?.folder as keyof PhotoManifest] || []).length
-						}
-					>
-						Load More Photos
-					</Button>
-				</div>
 			</div>
 		</div>
 	)
