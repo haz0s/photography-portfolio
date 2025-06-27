@@ -101,11 +101,7 @@ export default function PhotosPage() {
 				{/* Header */}
 				<div className="text-center mb-16">
 					<h1 className="text-4xl md:text-6xl font-light mb-6">Photos</h1>
-					<div className="w-16 h-0.5 bg-gradient-to-r from-[#8305a6] to-[#442273] mx-auto mb-6"></div>
-					<p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-						A curated collection of visual stories, each frame carefully crafted to capture emotion, beauty, and
-						authenticity.
-					</p>
+					
 				</div>
 
 				{/* Filter Buttons */}

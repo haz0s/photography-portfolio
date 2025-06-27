@@ -55,7 +55,7 @@ export default function HomePage() {
       title: "Moments",
       category: "Moments Photography",
       color: "#8305a6",
-      photo: "/photos/Photography/Moments/main-moments.jpg",
+      photo: "/photos/Photography/Moments/main-moments.JPG",
     },
   ]
 
@@ -176,6 +176,7 @@ export default function HomePage() {
                   key={item.id}
                   data-featured-card
                   className="flex-shrink-0 w-[420px] md:w-[520px] aspect-[16/9] rounded-2xl overflow-hidden shadow-lg bg-card group cursor-pointer transition-transform hover:scale-105 relative"
+                  onClick={() => window.location.href = "/photos"} // Add this line
                 >
                   <div className="relative w-full h-full">
                     <Image
