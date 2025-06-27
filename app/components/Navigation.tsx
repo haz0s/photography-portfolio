@@ -50,7 +50,7 @@ export default function Navigation() {
               className="object-contain"
               priority
             />
-            Judy Abdrabo
+            
           </Link>
 
           {/* Desktop Navigation */}

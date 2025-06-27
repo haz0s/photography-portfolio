@@ -28,22 +28,14 @@ type Project = {
 const projects: Project[] = [
   {
     id: 1,
-    title: "Boomph – Live Session",
-    category: "Music / Live Session",
-    description: "Recorded a live session with the Syrian rapper Bitter Mouthfeel using 3 Sony a7 IV and a 360 camera.",
-    videoUrl: "https://youtu.be/5aVHGmSvLTI?si=uWUPqUjKxujSVJZn",
+    title: "Lucid",
+    category: "Commercial",
+    description: "Producer with Burson Agency.",
+    videoUrl: "https://youtu.be/bns37rr7ytQ",
     // No thumbnail needed (YouTube)
   },
   {
     id: 2,
-    title: "EGA – Break The Mold",
-    category: "Commercial",
-    description: "Produced 'Break The Mold' campaign video with Burson Agency.",
-    videoUrl: "https://youtu.be/z9INTKS8CAw",
-    // No thumbnail needed (YouTube)
-  },
-  {
-    id: 3,
     title: "Isuzu – Ad",
     category: "Commercial",
     description: "Director assistant on an Isuzu ad.",
@@ -52,34 +44,7 @@ const projects: Project[] = [
     // No thumbnail needed (YouTube)
   },
   {
-    id: 4,
-    title: "Wedding Promo",
-    category: "Event / Wedding",
-    description: "Wedding Promo for Alaa Khashi.",
-    videoUrl: "https://youtu.be/uqFkYPU8q7Q",
-    // No thumbnail needed (YouTube)
-  },
-  {
-    id: 5,
-    title: "Jetex – FIFA",
-    category: "Commercial",
-    description: "Producer with Flick for Jetex FIFA campaign.",
-    videoUrl: [
-      "https://youtu.be/JOt_bjWkc0Q",
-      "https://www.instagram.com/reel/Cj27WC1DlhG/?igsh=dXRpeXdqcjAza2V1"
-    ],
-    // No thumbnail needed (YouTube)
-  },
-  {
-    id: 6,
-    title: "Lucid",
-    category: "Commercial",
-    description: "Producer with Burson Agency.",
-    videoUrl: "https://youtu.be/bns37rr7ytQ",
-    // No thumbnail needed (YouTube)
-  },
-  {
-    id: 7,
+    id: 3,
     title: "Sing in The Sky",
     category: "Music / Live Event",
     description: "Director Assistant.",
@@ -87,29 +52,15 @@ const projects: Project[] = [
     thumbnail: "/thumbnails/sing-in-the-sky.png",
   },
   {
-    id: 8,
-    title: "How To Series",
-    category: "Educational / Series",
-    description: "Created a 10-episode tips series.",
-    videoUrl: [
-      "https://youtu.be/TSX9Asn1m6A",
-      "https://youtu.be/n82a5MxMu9Q"
-    ],
+    id: 4,
+    title: "EGA – Break The Mold",
+    category: "Commercial",
+    description: "Produced 'Break The Mold' campaign video with Burson Agency.",
+    videoUrl: "https://youtu.be/z9INTKS8CAw",
     // No thumbnail needed (YouTube)
   },
   {
-    id: 9,
-    title: "Podcast with Advanced Media",
-    category: "Podcast",
-    description: "Hosted an episode of Advanced Podcast at Advanced Media with director Nadine Yasir.",
-    videoUrl: [
-      "https://drive.google.com/file/d/1wxUXJ7HCdiIq2QkJRoETCeEAarcEZC6h/preview",
-      "https://drive.google.com/file/d/18ALQeipVqcdQ3-Y_I1FnLIpCHIIVSYc7/preview"
-    ],
-    thumbnail: "/thumbnails/podcast-with-advanced-media.png",
-  },
-  {
-    id: 10,
+    id: 5,
     title: "Centre Point",
     category: "Art Direction / Commercial",
     description: "Art Direction alongside Jad Ezzi. Designs on set, end results, and BTS shots.",
@@ -121,7 +72,66 @@ const projects: Project[] = [
     // No thumbnail needed (YouTube)
   },
   {
+    id: 6,
+    title: "Boumph – Live Session",
+    category: "Music / Live Session",
+    description: "Recorded a live session with the Syrian rapper Bitter Mouthfeel using 3 Sony a7 IV and a 360 camera.",
+    videoUrl: "https://youtu.be/5aVHGmSvLTI?si=uWUPqUjKxujSVJZn",
+    // No thumbnail needed (YouTube)
+  },
+  {
+    id: 7,
+    title: "How To Series",
+    category: "Educational / Series",
+    description: "Created a 10-episode tips series.",
+    videoUrl: [
+      "https://youtu.be/TSX9Asn1m6A",
+      "https://youtu.be/n82a5MxMu9Q"
+    ],
+    // No thumbnail needed (YouTube)
+  },
+  {
+    id: 8,
+    title: "L'occitane - Ramadan",
+    category: "Commercial / Campaign",
+    description: "Ramadan campaign for L'occitane. Includes vertical video reels.",
+    videoUrl: "https://youtu.be/R88ZT66jsA0",
+    btsFolder: "loccitanebts",
+    reelsFolder: "loccitanereels",
+    // No thumbnail needed (YouTube)
+  },
+  {
+    id: 9,
+    title: "Wedding Promo",
+    category: "Event / Wedding",
+    description: "Wedding Promo for Alaa Khashi.",
+    videoUrl: "https://youtu.be/uqFkYPU8q7Q",
+    // No thumbnail needed (YouTube)
+  },
+  {
+    id: 10,
+    title: "Podcast with Advanced Media",
+    category: "Podcast",
+    description: "Hosted an episode of Advanced Podcast at Advanced Media with director Nadine Yasir.",
+    videoUrl: [
+      "https://drive.google.com/file/d/1wxUXJ7HCdiIq2QkJRoETCeEAarcEZC6h/preview",
+      "https://drive.google.com/file/d/18ALQeipVqcdQ3-Y_I1FnLIpCHIIVSYc7/preview"
+    ],
+    thumbnail: "/thumbnails/podcast-with-advanced-media.png",
+  },
+  {
     id: 11,
+    title: "Advanced Media Campaign",
+    category: "Commercial / Campaign",
+    description: "Advanced Media campaign with vertical reels and BTS.",
+    btsFolder: "advancedmediabts",
+    videoUrl: [
+      "https://drive.google.com/file/d/16zItmXTxmwaN9lx_mh7H4BaLhIHAEDLN/preview"
+    ],
+    thumbnail: "/thumbnails/advanced-media-campaign.png",
+  },
+  {
+    id: 12,
     title: "Unboxing Canon R5",
     category: "Product / Unboxing",
     description: "Unboxing and first impressions of the Canon R5. Includes BTS and vertical reels.",
@@ -132,7 +142,7 @@ const projects: Project[] = [
     thumbnail: "/thumbnails/unboxing-canon-r5.png",
   },
   {
-    id: 12,
+    id: 13,
     title: "Tecom Reels",
     category: "Corporate / Reels",
     description: "A series of vertical reels produced for Tecom.",
@@ -152,27 +162,6 @@ const projects: Project[] = [
       "https://drive.google.com/file/d/1DvTV3ATq1GxhQfd1oZoyLsl6dTwCYSde/preview",
     ],
     thumbnail: "/thumbnails/tecom-reels.png",
-  },
-  {
-    id: 13,
-    title: "L'occitane - Ramadan",
-    category: "Commercial / Campaign",
-    description: "Ramadan campaign for L'occitane. Includes vertical video reels.",
-    videoUrl: "https://youtu.be/R88ZT66jsA0",
-    btsFolder: "loccitanebts",
-    reelsFolder: "loccitanereels",
-    // No thumbnail needed (YouTube)
-  },
-  {
-    id: 14,
-    title: "Advanced Media Campaign",
-    category: "Commercial / Campaign",
-    description: "Advanced Media campaign with vertical reels and BTS.",
-    btsFolder: "advancedmediabts",
-    videoUrl: [
-      "https://drive.google.com/file/d/16zItmXTxmwaN9lx_mh7H4BaLhIHAEDLN/preview"
-    ],
-    thumbnail: "/thumbnails/advanced-media-campaign.png",
   },
 ]
 

@@ -126,7 +126,7 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-medium mb-2">Phone</h3>
-                  <p className="text-gray-600">+1 (555) 123-4567</p>
+                  <p className="text-gray-600">+971 58 675 5300</p>
                 </div>
               </div>
 
@@ -136,32 +136,38 @@ export default function ContactPage() {
                 </div>
                 <div>
                   <h3 className="font-medium mb-2">Location</h3>
-                  <p className="text-gray-600">New York City, NY</p>
-                  <p className="text-gray-600">Available for travel worldwide</p>
+                  <p className="text-gray-600">Dubai, UAE</p>
                 </div>
               </div>
             </div>
 
-            {/* Response Time */}
-            <div className="mt-12 p-6 bg-gray-50 rounded-lg">
-              <h3 className="font-medium mb-2">Response Time</h3>
-              <p className="text-gray-600 text-sm">
-                I typically respond to inquiries within 24-48 hours. For urgent projects, please mention it in your
-                message or call directly.
-              </p>
-            </div>
-
+            
             {/* Social Links */}
             <div className="mt-8">
-              <h3 className="font-medium mb-4">Follow My Work</h3>
-              <div className="flex gap-4">
-                <a href="#" className="text-gray-600 hover:text-black transition-colors">
+              <h3 className="font-medium mb-4">Follow Me On:</h3>
+              <div className="flex flex-col gap-2">
+                <a
+                  href="https://www.instagram.com/judy.abdrabo/?igsh=MTJvOHZ3YmsyYTFydA%3D%3D"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-[#8305a6] transition-colors"
+                >
                   Instagram
                 </a>
-                <a href="#" className="text-gray-600 hover:text-black transition-colors">
+                <a
+                  href="https://www.behance.net/judyabdr"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-[#8305a6] transition-colors"
+                >
                   Behance
                 </a>
-                <a href="#" className="text-gray-600 hover:text-black transition-colors">
+                <a
+                  href="https://www.linkedin.com/in/judy-abdrabo-b96915205?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-600 hover:text-[#8305a6] transition-colors"
+                >
                   LinkedIn
                 </a>
               </div>

@@ -20,42 +20,42 @@ export default function HomePage() {
       title: "Fashion",
       category: "Fashion Photography",
       color: "#8305a6",
-      photo: "photos/Photography/Fashion/DSC00553-edited.jpg",
+      photo: "photos/Photography/Fashion/main-fashion.jpg",
     },
     {
       id: 2,
       title: "Corporate",
       category: "Corporate Photography",
       color: "#442273",
-      photo: "/photos/Photography/Corprate/Snapins.ai_448847749_785279570345628_4420180342164272469_n_1080.jpg",
+      photo: "/photos/Photography/Corprate/main-corporate.jpg",
     },
     {
       id: 3,
       title: "Food",
       category: "Food Photography",
       color: "#f29f05",
-      photo: "/photos/Photography/Food Photography/1a1f97c6-a2f5-482e-b396-4243fcaf592a_rw_1920.jpg",
+      photo: "/photos/Photography/Food Photography/main-food.jpg",
     },
     {
       id: 4,
       title: "Portrait",
       category: "Portrait Photography",
       color: "#f27405",
-      photo: "/photos/Photography/Portraits/0cae67ba-6090-44e1-bdba-f921f2a80df9_rw_1920.jpg",
+      photo: "/photos/Photography/Portraits/main-portrait.jpg",
     },
     {
       id: 5,
       title: "Product",
       category: "Product Photography",
       color: "#f24405",
-      photo: "photos/Photography/Product Photography/5a76a877-79eb-4552-8829-aa0ec5e3dafd_rw_1920.jpg",
+      photo: "photos/Photography/Product Photography/main-product.jpg",
     },
     {
       id: 6,
       title: "Moments",
       category: "Moments Photography",
       color: "#8305a6",
-      photo: "/photos/Photography/Moments/01a104d7-5896-4d06-8600-96ed068ee6d1_rw_1920.png",
+      photo: "/photos/Photography/Moments/main-moments.jpg",
     },
   ]
 
@@ -139,10 +139,10 @@ export default function HomePage() {
         </h1>
         <div className="flex-1">
           <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-8 max-w-3xl">
-            Hi! I’m Judy — a Syrian photographer and producer based in Dubai, with 6 years of experience in the creative world. I’ve worked with over 70 clients and brands, from fashion and food to events and large-scale campaigns.
-            I hear it all the time: “We’re not photogenic!” But I truly believe that with the right light, angle, and approach — everyone can look and feel their best on camera. That mindset shapes everything I do, whether I’m shooting real moments, crafting the perfect food shot, or leading full productions for ads and music videos.
-            I love what I do, and I bring energy, creativity, and care to every project I take on.
-            From first idea to final shot — I’ve got you. Drop me a message and let’s get started.
+            Hey, I’m Judy — a Syrian photographer and producer living in Dubai. Been in the game for 6+ years, worked with 70+ brands, and shot everything from fashion and food to big events and ad campaigns.<br /><br />
+            People always tell me, “I’m not photogenic,” and honestly? I don’t buy it. With the right vibe, light, and angle — anyone can look and feel good on camera. That’s the mindset I bring to every shoot, whether it’s a raw, real moment or a full-blown music video or ad.<br /><br />
+            I’m all in on what I do — I show up with energy, ideas, and a lot of heart.<br /><br />
+            From that first idea to the final shot, I’ve got you.
           </p>
         </div>
       </section>
@@ -153,7 +153,7 @@ export default function HomePage() {
           <div className="text-center mb-16 animate-fade-in-on-scroll">
             <h2 className="text-4xl md:text-5xl font-light mb-4 text-foreground">Featured Work</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              A curated selection showcasing different styles and approaches across various photography genres
+              My Work
             </p>
           </div>
           {/* Horizontal scrollable featured works with arrow buttons */}
@@ -221,19 +221,13 @@ export default function HomePage() {
       {/* Clients Section */}
       <section className="py-24 px-4 bg-secondary">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16 animate-fade-in-on-scroll">
-            <h2 className="text-4xl md:text-5xl font-light mb-4 text-foreground">Trusted by Leading Brands</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Collaborating with industry leaders to create compelling visual narratives that drive results
-            </p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 items-center">
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-4 items-center justify-center">
             {clients.map((client, index) => (
               <div
                 key={index}
-                className="flex items-center justify-center p-6 bg-black rounded-xl shadow-sm"
+                className="flex items-center justify-center p-2 bg-black rounded-xl shadow-sm"
               >
-                <div className="relative w-full h-12 opacity-100">
+                <div className="relative w-28 h-12 opacity-100">
                   <Image
                     src={client.logo || "/placeholder.svg"}
                     alt={`${client.name} logo`}
@@ -244,28 +238,6 @@ export default function HomePage() {
               </div>
             ))}
           </div>
-          <div className="mt-16 text-center animate-fade-in-on-scroll">
-            <div className="bg-card rounded-2xl p-8 shadow-sm max-w-3xl mx-auto">
-              <div className="flex justify-center mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <div key={i} className="w-5 h-5 text-[#f29f05]">
-                    ⭐
-                  </div>
-                ))}
-              </div>
-              <blockquote className="text-lg text-muted-foreground italic mb-6">
-                "Judy's ability to capture our brand essence was remarkable. Her creative vision and professional
-                approach transformed our campaign into something truly extraordinary."
-              </blockquote>
-              <div className="flex items-center justify-center gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#8305a6] to-[#442273] rounded-full"></div>
-                <div className="text-left">
-                  <p className="font-medium text-foreground">Emma Rodriguez</p>
-                  <p className="text-sm text-muted-foreground">Creative Director, Luxe Fashion</p>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -274,7 +246,6 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 animate-fade-in-on-scroll">
             <h2 className="text-4xl md:text-5xl font-light mb-4 text-foreground">Services</h2>
-            <p className="text-lg text-muted-foreground">Bringing your vision to life through lens and creativity</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center group animate-fade-in-on-scroll">
@@ -282,27 +253,21 @@ export default function HomePage() {
                 <Camera className="h-10 w-10 text-white" />
               </div>
               <h3 className="text-xl font-medium mb-4 text-foreground">Photography</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Fashion, lifestyle, and commercial photography that captures the essence of your brand and story.
-              </p>
+              
             </div>
             <div className="text-center group animate-fade-in-on-scroll">
               <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-[#f29f05] to-[#f27405] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <Play className="h-10 w-10 text-white" />
               </div>
               <h3 className="text-xl font-medium mb-4 text-foreground">Video Production</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Cinematic storytelling through motion, creating compelling video content for brands and individuals.
-              </p>
+             
             </div>
             <div className="text-center group animate-fade-in-on-scroll">
               <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-[#f27405] to-[#f24405] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <ArrowRight className="h-10 w-10 text-white" />
               </div>
               <h3 className="text-xl font-medium mb-4 text-foreground">Creative Direction</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                End-to-end creative direction for campaigns, ensuring cohesive visual narratives that resonate.
-              </p>
+              
             </div>
           </div>
         </div>
