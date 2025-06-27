@@ -171,12 +171,12 @@ export default function HomePage() {
               className="flex overflow-x-auto gap-8 py-4 px-2 scroll-smooth scrollbar-hide"
               style={{ scrollBehavior: "smooth" }}
             >
-              {featuredWorks.map((item) => (
+              {featuredWorks.map((item, index) => (
                 <div
                   key={item.id}
                   data-featured-card
                   className="flex-shrink-0 w-[420px] md:w-[520px] aspect-[16/9] rounded-2xl overflow-hidden shadow-lg bg-card group cursor-pointer transition-transform hover:scale-105 relative"
-                  onClick={() => window.location.href = "/photos"} // Add this line
+                  onClick={() => window.location.href = "/photos"}
                 >
                   <div className="relative w-full h-full">
                     <Image
@@ -184,6 +184,9 @@ export default function HomePage() {
                       alt={item.title}
                       fill
                       className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                      sizes="(max-width: 768px) 90vw, 520px"
+                      priority={index < 2} // Only first 2 images load eagerly, rest are lazy
+                      loading={index < 2 ? "eager" : "lazy"}
                     />
                     {/* Overlay with big centered name, hides on hover */}
                     <div className="absolute inset-0 flex items-center justify-center bg-black/60 group-hover:bg-black/0 transition-all duration-500">
