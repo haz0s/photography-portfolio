@@ -139,9 +139,9 @@ export default function HomePage() {
         </h1>
         <div className="flex-1">
           <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-8 max-w-3xl">
-            Hey, I’m Judy — a Syrian photographer and producer living in Dubai. Been in the game for 6+ years, worked with 70+ brands, and shot everything from fashion and food to big events and ad campaigns.<br /><br />
-            People always tell me, “I’m not photogenic,” and honestly? I don’t buy it. With the right vibe, light, and angle — anyone can look and feel good on camera. That’s the mindset I bring to every shoot, whether it’s a raw, real moment or a full-blown music video or ad.<br /><br />
-            I’m all in on what I do — I show up with energy, ideas, and a lot of heart.<br /><br />
+            Hey, I’m Judy  a Syrian photographer and producer living in Dubai. Been in the game for 6+ years, worked with 70+ brands, and shot everything from fashion and food to big events and ad campaigns.<br /><br />
+            People always tell me, “I’m not photogenic,” and honestly? I don’t buy it. With the right vibe, light, and angle  anyone can look and feel good on camera. That’s the mindset I bring to every shoot, whether it’s a raw, real moment or a full-blown music video or ad.<br /><br />
+            I’m all in on what I do  I show up with energy, ideas, and a lot of heart.<br /><br />
             From that first idea to the final shot, I’ve got you.
           </p>
         </div>
