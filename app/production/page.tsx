@@ -143,7 +143,7 @@ const projects: Project[] = [
   },
   {
     id: 13,
-    title: "Tecom Reels",
+    title: "Social Reels",
     category: "Corporate / Reels",
     description: "A series of vertical reels produced for Tecom.",
     btsFolder: "tecombts",
