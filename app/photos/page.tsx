@@ -36,6 +36,11 @@ export default function PhotosPage() {
 	const [fullscreenPhoto, setFullscreenPhoto] = useState<null | string>(null)
 	const [imageSizes, setImageSizes] = useState<Record<string, { width: number; height: number }>>({})
 
+	useEffect(() => {
+		const category = new URLSearchParams(window.location.search).get("category")
+		if (category && categories.some((item) => item.label === category)) setActiveCategory(category)
+	}, [])
+
 	// Get the photo list for the current category from the manifest
 	let allPhotos: string[] = []
 	if (activeCategory === "All") {

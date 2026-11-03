@@ -20,7 +20,8 @@ export default function HomePage() {
       title: "Fashion",
       category: "Fashion Photography",
       color: "#8305a6",
-      photo: "photos/Photography/Fashion/main-fashion.jpg",
+      photo: "/photos/Photography/Fashion/main-fashion.jpg",
+      href: "/photos?category=Fashion",
     },
     {
       id: 2,
@@ -28,6 +29,7 @@ export default function HomePage() {
       category: "Corporate Photography",
       color: "#442273",
       photo: "/photos/Photography/Corprate/main-corporate.jpg",
+      href: "/photos?category=Corporate",
     },
     {
       id: 3,
@@ -35,6 +37,7 @@ export default function HomePage() {
       category: "Food Photography",
       color: "#f29f05",
       photo: "/photos/Photography/Food Photography/main-food.jpg",
+      href: "/photos?category=Food Photography",
     },
     {
       id: 4,
@@ -42,13 +45,15 @@ export default function HomePage() {
       category: "Portrait Photography",
       color: "#f27405",
       photo: "/photos/Photography/Portraits/main-portrait.jpg",
+      href: "/photos?category=Portraits",
     },
     {
       id: 5,
       title: "Product",
       category: "Product Photography",
       color: "#f24405",
-      photo: "photos/Photography/Product Photography/main-product.jpg",
+      photo: "/photos/Photography/Product Photography/main-product.jpg",
+      href: "/photos?category=Product Photography",
     },
     {
       id: 6,
@@ -56,6 +61,7 @@ export default function HomePage() {
       category: "Moments Photography",
       color: "#8305a6",
       photo: "/photos/Photography/Moments/main-moments.JPG",
+      href: "/photos?category=Moments",
     },
   ]
 
@@ -139,7 +145,7 @@ export default function HomePage() {
         </h1>
         <div className="flex-1">
           <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-8 max-w-3xl">
-            Hey, I’m Judy  a Syrian photographer and producer living in Dubai. Been in the game for 6+ years, worked with 70+ brands, and shot everything from fashion and food to big events and ad campaigns.<br /><br />
+            Hey, I’m Judy — a Syrian Creative Producer, Photographer and Videographer based in Dubai. With 8+ years of experience, I’ve worked across fashion, food, lifestyle, events and commercial campaigns for 70+ brands.<br /><br />
             People always tell me, “I’m not photogenic,” and honestly? I don’t buy it. With the right vibe, light, and angle  anyone can look and feel good on camera. That’s the mindset I bring to every shoot, whether it’s a raw, real moment or a full-blown music video or ad.<br /><br />
             I’m all in on what I do  I show up with energy, ideas, and a lot of heart.<br /><br />
             From that first idea to the final shot, I’ve got you.
@@ -176,8 +182,9 @@ export default function HomePage() {
                   key={item.id}
                   data-featured-card
                   className="flex-shrink-0 w-[420px] md:w-[520px] aspect-[16/9] rounded-2xl overflow-hidden shadow-lg bg-card group cursor-pointer transition-transform hover:scale-105 relative"
-                  onClick={() => window.location.href = "/photos"}
+
                 >
+                  <Link href={item.href} className="block h-full w-full" aria-label={`View ${item.title} photography project`}>
                   <div className="relative w-full h-full">
                     <Image
                       src={item.photo}
@@ -195,6 +202,7 @@ export default function HomePage() {
                       </span>
                     </div>
                   </div>
+                  </Link>
                 </div>
               ))}
             </div>
@@ -222,9 +230,39 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Featured Production */}
+      <section className="border-y border-border bg-card px-4 py-24">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-10 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+            <div>
+              <p className="mb-4 text-xs uppercase tracking-[0.28em] text-muted-foreground">Moving image</p>
+              <h2 className="text-4xl font-light md:text-5xl">Featured Production</h2>
+            </div>
+            <Link href="/production" className="text-sm uppercase tracking-[0.2em] text-accent hover:text-foreground">View all production <ArrowRight className="ml-2 inline size-4" /></Link>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {[
+              { title: "Lucid", category: "Commercial", image: "https://img.youtube.com/vi/bns37rr7ytQ/hqdefault.jpg", id: 1 },
+              { title: "Isuzu – Ad", category: "Commercial", image: "https://img.youtube.com/vi/BcNLcqvKfqg/hqdefault.jpg", id: 2 },
+              { title: "EGA – Break The Mold", category: "Commercial", image: "https://img.youtube.com/vi/z9INTKS8CAw/hqdefault.jpg", id: 4 },
+            ].map((item) => (
+              <Link key={item.id} href={`/production?project=${item.id}`} className="group">
+                <div className="relative aspect-video overflow-hidden rounded-xl bg-black">
+                  <Image src={item.image} alt={`${item.title} production still`} fill className="object-cover transition duration-700 group-hover:scale-105" sizes="(max-width: 768px) 100vw, 33vw" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+                  <div className="absolute bottom-5 left-5 text-white"><p className="text-xs uppercase tracking-[0.2em] text-white/70">{item.category}</p><h3 className="mt-2 text-2xl font-medium normal-case tracking-normal">{item.title}</h3></div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Clients Section */}
       <section className="py-24 px-4 bg-secondary">
         <div className="max-w-6xl mx-auto">
+          <p className="mb-5 text-xs uppercase tracking-[0.28em] text-muted-foreground">Selected collaborations</p>
+          <h2 className="mb-12 text-3xl md:text-4xl font-light text-foreground">Clients</h2>
           <div className="grid grid-cols-3 md:grid-cols-6 gap-4 items-center justify-center">
             {clients.map((client, index) => (
               <div

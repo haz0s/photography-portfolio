@@ -201,6 +201,19 @@ export default function ProductionPage() {
   const [fullscreenBts, setFullscreenBts] = useState<{ src: string; idx: number } | null>(null)
   const btsManifest = useBtsManifest()
 
+  useEffect(() => {
+    const projectId = new URLSearchParams(window.location.search).get("project")
+    if (projectId) {
+      const project = projects.find((item) => item.id === Number(projectId))
+      if (project) setSelectedProject(project)
+    }
+  }, [])
+
+  useEffect(() => {
+    document.body.style.overflow = selectedProject ? "hidden" : ""
+    return () => { document.body.style.overflow = "" }
+  }, [selectedProject])
+
   // Collage grid styling helper for dynamic layouts
   function getCollageClass(folder: string, idx: number) {
     // Collage feature commented out for now
@@ -292,7 +305,7 @@ export default function ProductionPage() {
         {/* Project Modal */}
         {selectedProject && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm">
-            <div className="relative w-full max-w-4xl bg-background rounded-xl shadow-lg p-8 overflow-y-auto max-h-[90vh]">
+            <div className="relative flex max-h-[calc(100dvh-2rem)] w-full max-w-6xl flex-col overflow-y-auto rounded-xl bg-background p-6 shadow-lg md:p-10">
               <button
                 className="absolute top-4 right-4 text-3xl text-white bg-black/60 rounded-full px-4 py-2 hover:bg-black/80 transition"
                 onClick={() => {
@@ -338,8 +351,9 @@ export default function ProductionPage() {
 
               {/* Video Embed */}
               {selectedProject.videoUrl && (
-                <div className="mt-8 space-y-8">
-                  <h3 className="text-xl font-semibold mb-4">Video</h3>
+                <div className="mt-8">
+                  <h3 className="mb-4 text-xl font-semibold">{selectedProject.title === "Social Reels" ? "Social Reels · Portrait edit" : "Video"}</h3>
+                  <div className={selectedProject.title === "Social Reels" ? "grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4" : "flex flex-col gap-8"}>
                   {(Array.isArray(selectedProject.videoUrl)
                     ? selectedProject.videoUrl
                     : [selectedProject.videoUrl]
@@ -348,7 +362,7 @@ export default function ProductionPage() {
                     if (id) {
                       // YouTube embed
                       return (
-                        <div key={idx} className="aspect-video w-full rounded-lg overflow-hidden shadow-lg">
+                        <div key={idx} className={selectedProject.title === "Social Reels" ? "aspect-[9/16] w-full overflow-hidden rounded-lg bg-black shadow-lg" : "aspect-video w-full overflow-hidden rounded-lg shadow-lg"}>
                           <iframe
                             src={`https://www.youtube.com/embed/${id}`}
                             title="YouTube video player"
@@ -363,7 +377,7 @@ export default function ProductionPage() {
                     const driveMatch = url.match(/drive\.google\.com\/file\/d\/([^/]+)/)
                     if (driveMatch) {
                       return (
-                        <div key={idx} className="aspect-video w-full rounded-lg overflow-hidden shadow-lg">
+                        <div key={idx} className={selectedProject.title === "Social Reels" ? "aspect-[9/16] w-full overflow-hidden rounded-lg bg-black shadow-lg" : "aspect-video w-full overflow-hidden rounded-lg shadow-lg"}>
                           <iframe
                             src={url}
                             allow="autoplay"
@@ -382,6 +396,7 @@ export default function ProductionPage() {
                       </div>
                     )
                   })}
+                  </div>
                 </div>
               )}
             </div>
