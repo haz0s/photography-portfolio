@@ -8,11 +8,11 @@ import Footer from "./components/Footer"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Judy Abdrabo - Visual Storyteller & Creative Director",
+  title: "Judy Abdrabo — Creative Producer, Photographer and Videographer",
   description:
-    "Professional photographer specializing in fashion, lifestyle, and commercial photography. Based in New York City, available worldwide.",
+    "Dubai-based Creative Producer, Photographer and Videographer with 8+ years of experience across fashion, food, campaigns, and film.",
   keywords:
-    "photographer, photography, fashion photography, lifestyle photography, commercial photography, New York photographer",
+    "creative producer, photographer, videographer, photography, film, Dubai photographer, Judy Abdrabo",
     generator: 'v0.dev'
 }
 

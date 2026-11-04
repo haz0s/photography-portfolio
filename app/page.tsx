@@ -6,6 +6,7 @@ import Link from "next/link"
 import { ArrowRight, Camera, Play, ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import ConveyorBelt from "@/components/ConveyorBelt" // <-- Import the new component
+import { featuredProductionSlugs, projectPath, projects } from "@/lib/production-projects"
 
 export default function HomePage() {
   const [isPaused, setIsPaused] = useState(false)
@@ -19,13 +20,15 @@ export default function HomePage() {
       id: 1,
       title: "Fashion",
       category: "Fashion Photography",
+      href: "/photos?category=Fashion",
       color: "#8305a6",
-      photo: "photos/Photography/Fashion/main-fashion.jpg",
+      photo: "/photos/Photography/Fashion/main-fashion.jpg",
     },
     {
       id: 2,
       title: "Corporate",
       category: "Corporate Photography",
+      href: "/photos?category=Corporate",
       color: "#442273",
       photo: "/photos/Photography/Corprate/main-corporate.jpg",
     },
@@ -33,6 +36,7 @@ export default function HomePage() {
       id: 3,
       title: "Food",
       category: "Food Photography",
+      href: `/photos?category=${encodeURIComponent("Food Photography")}`,
       color: "#f29f05",
       photo: "/photos/Photography/Food Photography/main-food.jpg",
     },
@@ -40,6 +44,7 @@ export default function HomePage() {
       id: 4,
       title: "Portrait",
       category: "Portrait Photography",
+      href: "/photos?category=Portraits",
       color: "#f27405",
       photo: "/photos/Photography/Portraits/main-portrait.jpg",
     },
@@ -47,17 +52,23 @@ export default function HomePage() {
       id: 5,
       title: "Product",
       category: "Product Photography",
+      href: `/photos?category=${encodeURIComponent("Product Photography")}`,
       color: "#f24405",
-      photo: "photos/Photography/Product Photography/main-product.jpg",
+      photo: "/photos/Photography/Product Photography/main-product.jpg",
     },
     {
       id: 6,
       title: "Moments",
       category: "Moments Photography",
+      href: "/photos?category=Moments",
       color: "#8305a6",
       photo: "/photos/Photography/Moments/main-moments.JPG",
     },
   ]
+
+  const featuredProduction = featuredProductionSlugs
+    .map((slug) => projects.find((project) => project.slug === slug))
+    .filter((project): project is (typeof projects)[number] => Boolean(project))
 
   const clients = [
     { name: "Sephora", logo: "/logos/sephora-logo.png" },
@@ -93,7 +104,7 @@ export default function HomePage() {
   const scrollFeatured = (direction: "left" | "right") => {
     const container = featuredScrollRef.current;
     if (!container) return;
-    const card = container.querySelector("div[data-featured-card]");
+    const card = container.querySelector("[data-featured-card]");
     if (!card) return;
     const cardWidth = (card as HTMLElement).offsetWidth + 32; // 32px gap-8
     const visibleCards = Math.floor(container.offsetWidth / cardWidth);
@@ -139,9 +150,9 @@ export default function HomePage() {
         </h1>
         <div className="flex-1">
           <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-8 max-w-3xl">
-            Hey, I’m Judy  a Syrian photographer and producer living in Dubai. Been in the game for 6+ years, worked with 70+ brands, and shot everything from fashion and food to big events and ad campaigns.<br /><br />
-            People always tell me, “I’m not photogenic,” and honestly? I don’t buy it. With the right vibe, light, and angle  anyone can look and feel good on camera. That’s the mindset I bring to every shoot, whether it’s a raw, real moment or a full-blown music video or ad.<br /><br />
-            I’m all in on what I do  I show up with energy, ideas, and a lot of heart.<br /><br />
+            Hey, I’m Judy — a Syrian Creative Producer, Photographer and Videographer living in Dubai. Been in the game for 8+ years, worked with 70+ brands, and shot everything from fashion and food to big events and ad campaigns.<br /><br />
+            People always tell me, “I’m not photogenic,” and honestly? I don’t buy it. With the right vibe, light, and angle, anyone can look and feel good on camera. That’s the mindset I bring to every shoot, whether it’s a raw, real moment or a full-blown music video or ad.<br /><br />
+            I’m all in on what I do. I show up with energy, ideas, and a lot of heart.<br /><br />
             From that first idea to the final shot, I’ve got you.
           </p>
         </div>
@@ -151,7 +162,7 @@ export default function HomePage() {
       <section className="py-24 px-4 bg-background">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16 animate-fade-in-on-scroll">
-            <h2 className="text-4xl md:text-5xl font-light mb-4 text-foreground">Featured Work</h2>
+            <h2 className="text-4xl md:text-5xl font-light mb-4 text-foreground">Featured Photography</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               My Work
             </p>
@@ -172,11 +183,11 @@ export default function HomePage() {
               style={{ scrollBehavior: "smooth" }}
             >
               {featuredWorks.map((item, index) => (
-                <div
+                <Link
                   key={item.id}
+                  href={item.href}
                   data-featured-card
                   className="flex-shrink-0 w-[420px] md:w-[520px] aspect-[16/9] rounded-2xl overflow-hidden shadow-lg bg-card group cursor-pointer transition-transform hover:scale-105 relative"
-                  onClick={() => window.location.href = "/photos"}
                 >
                   <div className="relative w-full h-full">
                     <Image
@@ -195,7 +206,7 @@ export default function HomePage() {
                       </span>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
             <button
@@ -215,7 +226,56 @@ export default function HomePage() {
               className="border-2 border-[#8305a6] text-[#8305a6] hover:bg-[#8305a6] hover:text-white transition-all duration-300 font-medium"
             >
               <Link href="/photos">
-                Explore Full Portfolio <ArrowRight className="ml-2 h-4 w-4" />
+                Explore Photography <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Production */}
+      <section className="py-24 px-4 bg-secondary">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16 animate-fade-in-on-scroll">
+            <h2 className="text-4xl md:text-5xl font-light mb-4 text-foreground">Featured Production</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Selected films
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {featuredProduction.map((project) => (
+              <Link
+                key={project.slug}
+                href={projectPath(project.slug)}
+                className="group relative aspect-[16/9] rounded-2xl overflow-hidden shadow-lg bg-card cursor-pointer transition-transform hover:scale-105"
+              >
+                <Image
+                  src={project.thumbnail || "/placeholder.svg"}
+                  alt={project.title}
+                  fill
+                  className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
+                  sizes="(max-width: 768px) 90vw, 400px"
+                />
+                <div className="absolute inset-0 flex items-center justify-center bg-black/60 group-hover:bg-black/30 transition-all duration-500">
+                  <div className="flex flex-col items-center gap-3 px-4">
+                    <Play className="h-12 w-12 text-white/90 bg-black/40 rounded-full p-3" />
+                    <span className="text-white text-2xl md:text-3xl font-bold text-center">
+                      {project.title}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+          <div className="text-center mt-12 animate-fade-in-on-scroll">
+            <Button
+              asChild
+              variant="outline"
+              size="lg"
+              className="border-2 border-[#8305a6] text-[#8305a6] hover:bg-[#8305a6] hover:text-white transition-all duration-300 font-medium"
+            >
+              <Link href="/production">
+                Explore Production <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
           </div>
@@ -223,8 +283,9 @@ export default function HomePage() {
       </section>
 
       {/* Clients Section */}
-      <section className="py-24 px-4 bg-secondary">
+      <section className="py-24 px-4 bg-background">
         <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-light mb-12 text-center text-foreground">Clients:</h2>
           <div className="grid grid-cols-3 md:grid-cols-6 gap-4 items-center justify-center">
             {clients.map((client, index) => (
               <div
@@ -245,34 +306,27 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Services */}
-      <section className="py-24 px-4 bg-background">
+      {/* Photography and Production — equal core areas */}
+      <section className="py-24 px-4 bg-secondary">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16 animate-fade-in-on-scroll">
             <h2 className="text-4xl md:text-5xl font-light mb-4 text-foreground">Services</h2>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center group animate-fade-in-on-scroll">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Link href="/photos" className="text-center group animate-fade-in-on-scroll rounded-2xl bg-background p-10 shadow-sm hover:shadow-lg transition-shadow">
               <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-[#8305a6] to-[#442273] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <Camera className="h-10 w-10 text-white" />
               </div>
-              <h3 className="text-xl font-medium mb-4 text-foreground">Photography</h3>
-              
-            </div>
-            <div className="text-center group animate-fade-in-on-scroll">
+              <h3 className="text-2xl font-medium mb-3 text-foreground">Photography</h3>
+              <p className="text-muted-foreground">Fashion, portraits, food, product, and moments.</p>
+            </Link>
+            <Link href="/production" className="text-center group animate-fade-in-on-scroll rounded-2xl bg-background p-10 shadow-sm hover:shadow-lg transition-shadow">
               <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-[#f29f05] to-[#f27405] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <Play className="h-10 w-10 text-white" />
               </div>
-              <h3 className="text-xl font-medium mb-4 text-foreground">Video Production</h3>
-             
-            </div>
-            <div className="text-center group animate-fade-in-on-scroll">
-              <div className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-[#f27405] to-[#f24405] rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <ArrowRight className="h-10 w-10 text-white" />
-              </div>
-              <h3 className="text-xl font-medium mb-4 text-foreground">Creative Direction</h3>
-              
-            </div>
+              <h3 className="text-2xl font-medium mb-3 text-foreground">Production</h3>
+              <p className="text-muted-foreground">Films, campaigns, and social reels.</p>
+            </Link>
           </div>
         </div>
       </section>
