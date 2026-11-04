@@ -1,169 +1,17 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useLayoutEffect } from "react"
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
 import { Play } from "lucide-react"
-
-// Helper to extract YouTube ID from URL
-const getYouTubeId = (url: string) => {
-  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|v\/))([\w-]{11})/)
-  return match ? match[1] : ""
-}
-
-// Helper to check if link is YouTube
-const isYouTube = (url: string) => /youtu\.be|youtube\.com/.test(url)
-
-type Project = {
-  id: number
-  title: string
-  description: string
-  category: string
-  videoUrl?: string | string[]
-  btsFolder?: string // Folder name for BTS images
-  reelsFolder?: string // Folder name for reels videos
-  thumbnail?: string // Optional thumbnail image path
-}
-
-const projects: Project[] = [
-  {
-    id: 1,
-    title: "Lucid",
-    category: "Commercial",
-    description: "Producer with Burson Agency.",
-    videoUrl: "https://youtu.be/bns37rr7ytQ",
-    // No thumbnail needed (YouTube)
-  },
-  {
-    id: 2,
-    title: "Isuzu – Ad",
-    category: "Commercial",
-    description: "Director assistant on an Isuzu ad.",
-    videoUrl: "https://youtu.be/BcNLcqvKfqg",
-    btsFolder: "isuzubts",
-    // No thumbnail needed (YouTube)
-  },
-  {
-    id: 3,
-    title: "Sing in The Sky",
-    category: "Music / Live Event",
-    description: "Director Assistant.",
-    videoUrl: "https://shahid.mbc.net/en/shows/Ghannili-Bil-Jaw/show-957168",
-    thumbnail: "/thumbnails/sing-in-the-sky.png",
-  },
-  {
-    id: 4,
-    title: "EGA – Break The Mold",
-    category: "Commercial",
-    description: "Produced 'Break The Mold' campaign video with Burson Agency.",
-    videoUrl: "https://youtu.be/z9INTKS8CAw",
-    // No thumbnail needed (YouTube)
-  },
-  {
-    id: 5,
-    title: "Centre Point",
-    category: "Art Direction / Commercial",
-    description: "Art Direction alongside Jad Ezzi. Designs on set, end results, and BTS shots.",
-    videoUrl: [
-      "https://youtu.be/5rh7CPMHo5Q",
-      "https://youtu.be/OgWyrkQRvxI"
-    ],
-    btsFolder: "centrepointbts",
-    // No thumbnail needed (YouTube)
-  },
-  {
-    id: 6,
-    title: "Boumph – Live Session",
-    category: "Music / Live Session",
-    description: "Recorded a live session with the Syrian rapper Bitter Mouthfeel using 3 Sony a7 IV and a 360 camera.",
-    videoUrl: "https://youtu.be/5aVHGmSvLTI?si=uWUPqUjKxujSVJZn",
-    // No thumbnail needed (YouTube)
-  },
-  {
-    id: 7,
-    title: "How To Series",
-    category: "Educational / Series",
-    description: "Created a 10-episode tips series.",
-    videoUrl: [
-      "https://youtu.be/TSX9Asn1m6A",
-      "https://youtu.be/n82a5MxMu9Q"
-    ],
-    // No thumbnail needed (YouTube)
-  },
-  {
-    id: 8,
-    title: "L'occitane - Ramadan",
-    category: "Commercial / Campaign",
-    description: "Ramadan campaign for L'occitane. Includes vertical video reels.",
-    videoUrl: "https://youtu.be/R88ZT66jsA0",
-    btsFolder: "loccitanebts",
-    reelsFolder: "loccitanereels",
-    // No thumbnail needed (YouTube)
-  },
-  {
-    id: 9,
-    title: "Wedding Promo",
-    category: "Event / Wedding",
-    description: "Wedding Promo for Alaa Khashi.",
-    videoUrl: "https://youtu.be/uqFkYPU8q7Q",
-    // No thumbnail needed (YouTube)
-  },
-  {
-    id: 10,
-    title: "Podcast with Advanced Media",
-    category: "Podcast",
-    description: "Hosted an episode of Advanced Podcast at Advanced Media with director Nadine Yasir.",
-    videoUrl: [
-      "https://drive.google.com/file/d/1wxUXJ7HCdiIq2QkJRoETCeEAarcEZC6h/preview",
-      "https://drive.google.com/file/d/18ALQeipVqcdQ3-Y_I1FnLIpCHIIVSYc7/preview"
-    ],
-    thumbnail: "/thumbnails/podcast-with-advanced-media.png",
-  },
-  {
-    id: 11,
-    title: "Advanced Media Campaign",
-    category: "Commercial / Campaign",
-    description: "Advanced Media campaign with vertical reels and BTS.",
-    btsFolder: "advancedmediabts",
-    videoUrl: [
-      "https://drive.google.com/file/d/16zItmXTxmwaN9lx_mh7H4BaLhIHAEDLN/preview"
-    ],
-    thumbnail: "/thumbnails/advanced-media-campaign.png",
-  },
-  {
-    id: 12,
-    title: "Unboxing Canon R5",
-    category: "Product / Unboxing",
-    description: "Unboxing and first impressions of the Canon R5. Includes BTS and vertical reels.",
-    btsFolder: "canonr5bts",
-    videoUrl: [
-      "https://drive.google.com/file/d/1Q0dDLhVP4QTrAYwmPkpwpYzD2v1fZMqa/preview"
-    ],
-    thumbnail: "/thumbnails/unboxing-canon-r5.png",
-  },
-  {
-    id: 13,
-    title: "Social Reels",
-    category: "Corporate / Reels",
-    description: "A series of vertical reels produced for Tecom.",
-    btsFolder: "tecombts",
-    videoUrl: [
-      "https://drive.google.com/file/d/1CK6oeNkoiNNgjVqMb1Pdax-1NoY37Y8-/preview",
-      "https://drive.google.com/file/d/186ahLwdIBNhgXVpHMIpl6kKqJdbo3Lyo/preview",
-      "https://drive.google.com/file/d/1E77P5eDp-tQnf7z-yqXlUZeatu7pXmA6/preview",
-      "https://drive.google.com/file/d/1ZAvgV-aWyR9O5NP4UebNzhV75iaaF0r_/preview",
-      "https://drive.google.com/file/d/1_-ojVimRT524JsCM1nKvknXpNnXEIfgE/preview",
-      "https://drive.google.com/file/d/1ShIRfBK8Lc-Ldnyv1ewUS1ud3HUX_Tvi/preview",
-      "https://drive.google.com/file/d/1lo9lDSeqMBEqhYXtm4vLqPXzoqqrnExX/preview",
-      "https://drive.google.com/file/d/12U-OrdZet7eDpI5jmeZOoUSssGRLU-aR/preview",
-      "https://drive.google.com/file/d/1O8BAlMrQIcbwidlE-ng7hdFsBwqJiuZj/preview",
-      "https://drive.google.com/file/d/1TuoEeuMeaeXoT7H6Y0PKCd5V5G9QXc4k/preview",
-      "https://drive.google.com/file/d/1vI4i_8FZ2DqEreeubKN90X7YcaN67N8s/preview",
-      "https://drive.google.com/file/d/1DvTV3ATq1GxhQfd1oZoyLsl6dTwCYSde/preview",
-    ],
-    thumbnail: "/thumbnails/tecom-reels.png",
-  },
-]
+import {
+  projects,
+  projectVideos,
+  getYouTubeId,
+  isYouTube,
+  posterFor,
+  type Project,
+  type VideoAsset,
+} from "@/lib/production-projects"
 
 // Dynamically import all BTS images from the /public/bts folder and subfolders
 function useBtsManifest() {
@@ -196,10 +44,131 @@ function useBtsManifest() {
   return manifest
 }
 
+function Poster({ src, alt }: { src: string; alt: string }) {
+  if (!src) return <div className="absolute inset-0 bg-neutral-900" />
+  if (src.startsWith("/")) {
+    return <Image src={src} alt={alt} fill className="object-cover" />
+  }
+  return <img src={src} alt={alt} className="absolute inset-0 h-full w-full object-cover" />
+}
+
+function VideoFrame({ url, title }: { url: string; title?: string }) {
+  const id = getYouTubeId(url)
+  if (id) {
+    return (
+      <iframe
+        src={`https://www.youtube.com/embed/${id}`}
+        title={title || "YouTube video player"}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        className="h-full w-full"
+      />
+    )
+  }
+  const driveMatch = url.match(/drive\.google\.com\/file\/d\/([^/]+)/)
+  if (driveMatch) {
+    const src = /\/preview(?:\?|$)/.test(url)
+      ? url
+      : `https://drive.google.com/file/d/${driveMatch[1]}/preview`
+    return (
+      <iframe
+        src={src}
+        title={title || "Video"}
+        allow="autoplay"
+        allowFullScreen
+        className="h-full w-full"
+      />
+    )
+  }
+  return (
+    <div className="flex h-full items-center justify-center p-6 text-center">
+      <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
+        View Video
+      </a>
+    </div>
+  )
+}
+
+function VideoGallery({
+  videos,
+  activeVideo,
+  onSelect,
+}: {
+  videos: VideoAsset[]
+  activeVideo: number
+  onSelect: (index: number) => void
+}) {
+  const current = videos[Math.min(activeVideo, videos.length - 1)]
+  const multiple = videos.length > 1
+  const allPortrait = videos.every((video) => video.portrait)
+  return (
+    <div className="mt-8 space-y-6">
+      <h3 className="text-xl font-semibold">{multiple && allPortrait ? "Reels" : multiple ? "Videos" : "Video"}</h3>
+      <div className="aspect-video w-full overflow-hidden rounded-lg bg-black shadow-lg">
+        <VideoFrame url={current.url} title={current.title} />
+      </div>
+      {multiple && (
+        <div className={`grid gap-4 ${allPortrait ? "grid-cols-2 sm:grid-cols-3" : "grid-cols-1 sm:grid-cols-2"}`}>
+          {videos.map((video, idx) => {
+            const selected = idx === activeVideo
+            const poster = posterFor(video)
+            return (
+              <button
+                key={`${video.url}-${idx}`}
+                type="button"
+                onClick={() => onSelect(idx)}
+                className={`overflow-hidden rounded-lg border text-left transition ${
+                  selected ? "border-[#8305a6] ring-2 ring-[#8305a6]" : "border-white/10 hover:border-[#8305a6]"
+                }`}
+                aria-pressed={selected}
+                aria-label={video.title || `Play video ${idx + 1}`}
+              >
+                <div className={`relative bg-black ${video.portrait ? "aspect-[9/16]" : "aspect-video"}`}>
+                  <Poster src={poster} alt={video.title || "Video"} />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Play className="h-10 w-10 rounded-full bg-black/50 p-2 text-white/90" />
+                  </div>
+                </div>
+                {video.title && <p className="px-2 py-2 text-sm text-foreground">{video.title}</p>}
+              </button>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function ProductionPage() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [fullscreenBts, setFullscreenBts] = useState<{ src: string; idx: number } | null>(null)
+  const [activeVideo, setActiveVideo] = useState(0)
   const btsManifest = useBtsManifest()
+
+  useLayoutEffect(() => {
+    const sync = () => {
+      const slug = new URLSearchParams(window.location.search).get("project")
+      const match = slug ? projects.find((item) => item.slug === slug) ?? null : null
+      setSelectedProject(match)
+      setActiveVideo(0)
+    }
+    sync()
+    window.addEventListener("popstate", sync)
+    return () => window.removeEventListener("popstate", sync)
+  }, [])
+
+  const openProject = (project: Project) => {
+    setSelectedProject(project)
+    setActiveVideo(0)
+    window.history.pushState({}, "", `/production?project=${encodeURIComponent(project.slug)}`)
+  }
+
+  const closeProject = () => {
+    setSelectedProject(null)
+    setFullscreenBts(null)
+    setActiveVideo(0)
+    window.history.pushState({}, "", "/production")
+  }
 
   // Collage grid styling helper for dynamic layouts
   function getCollageClass(folder: string, idx: number) {
@@ -225,37 +194,37 @@ export default function ProductionPage() {
         {!selectedProject && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             {projects.map((project) => {
-              // Determine if project has a YouTube video
+              const media = projectVideos(project)
+              const first = media[0]
               let videoThumb: string | null = null
-              let videoId: string | null = null
-              if (project.videoUrl) {
-                const url = Array.isArray(project.videoUrl) ? project.videoUrl[0] : project.videoUrl
-                if (isYouTube(url)) {
-                  videoId = getYouTubeId(url)
-                  if (videoId) {
-                    videoThumb = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
-                  }
+              if (first && isYouTube(first.url)) {
+                const videoId = getYouTubeId(first.url)
+                if (videoId) {
+                  videoThumb = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
                 }
               }
               if (!videoThumb && project.thumbnail) {
                 videoThumb = project.thumbnail
               }
-              // Use first BTS image as fallback if available
+              if (!videoThumb && first) {
+                const poster = posterFor(first)
+                if (poster) videoThumb = poster
+              }
               const btsImages = project.btsFolder ? btsManifest[project.btsFolder] || [] : []
+              const portraitCover = project.slug === "social-reels"
               return (
                 <div
                   key={project.id}
                   className="group relative rounded-xl overflow-hidden bg-secondary shadow-lg hover:shadow-xl transition-shadow duration-300 cursor-pointer"
-                  onClick={() => setSelectedProject(project)}
+                  onClick={() => openProject(project)}
                 >
                   <div className="relative aspect-video bg-black">
-                    {/* Show YouTube thumbnail if available, else first BTS photo */}
                     {videoThumb ? (
                       <Image
                         src={videoThumb}
                         alt={project.title}
                         fill
-                        className="object-cover object-center"
+                        className={portraitCover ? "object-cover object-top" : "object-cover object-center"}
                       />
                     ) : btsImages.length > 0 ? (
                       <Image
@@ -269,8 +238,7 @@ export default function ProductionPage() {
                         No Image
                       </div>
                     )}
-                    {/* Play icon if video */}
-                    {project.videoUrl && (
+                    {media.length > 0 && (
                       <div className="absolute inset-0 flex items-center justify-center">
                         <Play className="h-16 w-16 text-white/80 bg-black/50 rounded-full p-4" />
                       </div>
@@ -292,13 +260,10 @@ export default function ProductionPage() {
         {/* Project Modal */}
         {selectedProject && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm">
-            <div className="relative w-full max-w-4xl bg-background rounded-xl shadow-lg p-8 overflow-y-auto max-h-[90vh]">
+            <div className="relative w-full max-w-6xl bg-background rounded-xl shadow-lg p-8 overflow-y-auto max-h-[90vh]">
               <button
                 className="absolute top-4 right-4 text-3xl text-white bg-black/60 rounded-full px-4 py-2 hover:bg-black/80 transition"
-                onClick={() => {
-                  setSelectedProject(null)
-                  setFullscreenBts(null)
-                }}
+                onClick={closeProject}
                 aria-label="Close"
               >
                 ×
@@ -336,53 +301,12 @@ export default function ProductionPage() {
                 </div>
               )}
 
-              {/* Video Embed */}
-              {selectedProject.videoUrl && (
-                <div className="mt-8 space-y-8">
-                  <h3 className="text-xl font-semibold mb-4">Video</h3>
-                  {(Array.isArray(selectedProject.videoUrl)
-                    ? selectedProject.videoUrl
-                    : [selectedProject.videoUrl]
-                  ).map((url, idx) => {
-                    const id = getYouTubeId(url)
-                    if (id) {
-                      // YouTube embed
-                      return (
-                        <div key={idx} className="aspect-video w-full rounded-lg overflow-hidden shadow-lg">
-                          <iframe
-                            src={`https://www.youtube.com/embed/${id}`}
-                            title="YouTube video player"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                            className="w-full h-full"
-                          />
-                        </div>
-                      )
-                    }
-                    // Google Drive embed
-                    const driveMatch = url.match(/drive\.google\.com\/file\/d\/([^/]+)/)
-                    if (driveMatch) {
-                      return (
-                        <div key={idx} className="aspect-video w-full rounded-lg overflow-hidden shadow-lg">
-                          <iframe
-                            src={url}
-                            allow="autoplay"
-                            allowFullScreen
-                            className="w-full h-full"
-                          />
-                        </div>
-                      )
-                    }
-                    // Fallback: show as external link
-                    return (
-                      <div key={idx} className="my-4">
-                        <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline">
-                          View Video
-                        </a>
-                      </div>
-                    )
-                  })}
-                </div>
+              {projectVideos(selectedProject).length > 0 && (
+                <VideoGallery
+                  videos={projectVideos(selectedProject)}
+                  activeVideo={activeVideo}
+                  onSelect={setActiveVideo}
+                />
               )}
             </div>
 

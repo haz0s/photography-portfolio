@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useLayoutEffect } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import photoManifestJson from "../../photoManifest.json"
 
@@ -17,14 +18,14 @@ type PhotoManifest = {
 const photoManifest = photoManifestJson as PhotoManifest
 
 // Define your categories and their folder names
-const categories = [
+const categories: { label: string; folder: string | null; cover?: string }[] = [
 	{ label: "All", folder: null },
-	{ label: "Corporate", folder: "Corprate" },
-	{ label: "Fashion", folder: "Fashion" },
-	{ label: "Food Photography", folder: "Food Photography" },
-	{ label: "Moments", folder: "Moments" },
-	{ label: "Portraits", folder: "Portraits" },
-	{ label: "Product Photography", folder: "Product Photography" },
+	{ label: "Corporate", folder: "Corprate", cover: "/photos/Photography/Corprate/main-corporate.jpg" },
+	{ label: "Fashion", folder: "Fashion", cover: "/photos/Photography/Fashion/main-fashion.jpg" },
+	{ label: "Food Photography", folder: "Food Photography", cover: "/photos/Photography/Food Photography/main-food.jpg" },
+	{ label: "Moments", folder: "Moments", cover: "/photos/Photography/Moments/main-moments.JPG" },
+	{ label: "Portraits", folder: "Portraits", cover: "/photos/Photography/Portraits/main-portrait.jpg" },
+	{ label: "Product Photography", folder: "Product Photography", cover: "/photos/Photography/Product Photography/main-product.jpg" },
 ]
 
 // Number of photos to load per batch
@@ -36,14 +37,29 @@ export default function PhotosPage() {
 	const [fullscreenPhoto, setFullscreenPhoto] = useState<null | string>(null)
 	const [imageSizes, setImageSizes] = useState<Record<string, { width: number; height: number }>>({})
 
-	// Get the photo list for the current category from the manifest
+	useLayoutEffect(() => {
+		const apply = () => {
+			const value = new URLSearchParams(window.location.search).get("category")
+			const match = categories.find((category) => category.label === value)
+			setActiveCategory(match ? match.label : "All")
+			setPage(0)
+		}
+		apply()
+		window.addEventListener("popstate", apply)
+		return () => window.removeEventListener("popstate", apply)
+	}, [])
+
+	const openCategory = (label: string) => {
+		setActiveCategory(label)
+		setPage(0)
+		setFullscreenPhoto(null)
+		const url = label === "All" ? "/photos" : `/photos?category=${encodeURIComponent(label)}`
+		window.history.pushState({}, "", url)
+	}
+
+	// Landing shows one cover per gallery. A selected category shows that gallery only.
 	let allPhotos: string[] = []
-	if (activeCategory === "All") {
-		allPhotos = categories
-			.filter((c) => c.folder)
-			.flatMap((cat) => photoManifest[cat.folder as keyof PhotoManifest] || [])
-			.filter((src): src is string => typeof src === "string")
-	} else {
+	if (activeCategory !== "All") {
 		const folder = categories.find((c) => c.label === activeCategory)?.folder
 		if (folder) {
 			allPhotos = (photoManifest[folder as keyof PhotoManifest] || [])
@@ -90,6 +106,9 @@ export default function PhotosPage() {
 				{/* Header */}
 				<div className="text-center mb-16">
 					<h1 className="text-4xl md:text-6xl font-light mb-6">Photos</h1>
+					<p className="text-lg text-gray-600 max-w-2xl mx-auto">
+						Each series opens its own gallery.
+					</p>
 				</div>
 
 				{/* Filter Buttons */}
@@ -98,10 +117,7 @@ export default function PhotosPage() {
 						<Button
 							key={category.label}
 							variant={activeCategory === category.label ? "default" : "outline"}
-							onClick={() => {
-								setActiveCategory(category.label)
-								setPage(0)
-							}}
+							onClick={() => openCategory(category.label)}
 							className={`px-6 py-2 transition-all duration-300 ${
 								activeCategory === category.label
 									? "bg-[#8305a6] text-white hover:bg-[#442273]"
@@ -113,7 +129,37 @@ export default function PhotosPage() {
 					))}
 				</div>
 
-				{/* Natural Collage Photo Grid */}
+				{activeCategory === "All" ? (
+					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+						{categories
+							.filter((category) => category.cover)
+							.map((category) => (
+								<Link
+									key={category.label}
+									href={`/photos?category=${encodeURIComponent(category.label)}`}
+									onClick={(event) => {
+										if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return
+										event.preventDefault()
+										openCategory(category.label)
+									}}
+									className="group relative aspect-[16/9] overflow-hidden rounded-2xl shadow-lg"
+								>
+									<Image
+										src={category.cover!}
+										alt={category.label}
+										fill
+										className="object-cover grayscale transition-all duration-700 group-hover:grayscale-0"
+										sizes="(max-width: 768px) 90vw, 400px"
+									/>
+									<div className="absolute inset-0 flex items-center justify-center bg-black/60 transition-all duration-500 group-hover:bg-black/0">
+										<span className="px-4 text-center text-4xl font-bold text-white transition-all duration-500 group-hover:scale-90 group-hover:opacity-0">
+											{category.label}
+										</span>
+									</div>
+								</Link>
+							))}
+					</div>
+				) : (
 				<div className="flex flex-wrap gap-3 md:gap-4 justify-center">
 					{photos.map((src, index) => {
 						const size = imageSizes[src]
@@ -145,8 +191,10 @@ export default function PhotosPage() {
 						)
 					})}
 				</div>
+				)}
 
 				{/* Pagination Controls */}
+				{activeCategory !== "All" && totalPages > 1 && (
 				<div className="flex justify-center items-center gap-6 mt-16">
 					<Button
 						variant="outline"
@@ -170,6 +218,7 @@ export default function PhotosPage() {
 						Next
 					</Button>
 				</div>
+				)}
 
 				{/* Fullscreen Modal */}
 				{fullscreenPhoto && (
